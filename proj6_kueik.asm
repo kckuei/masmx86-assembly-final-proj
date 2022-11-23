@@ -145,11 +145,11 @@ MAXARRSIZE	=		10			; Max signed integer array size.
 ; Declare data segment variables (only referenced directly in main PROC).
 .data
 introTxt	BYTE	"PROGRAMMING ASSIGNMENT 6: Designing low-level I/O procedures",13,10
-			BYTE	"Written by: Kevin Kuei",13,10,13,10
-			BYTE	"Please provide 10 signed decimal integers.",13,10  
-			BYTE	"Each number needs to be small enough to fit inside a 32 bit register. After you have",13,10
-			BYTE	"finished inputting the raw numbers I will display a list of the integers, their sum,",13,10
-			BYTE	"and their average value.",13,10,13,10,0 
+		BYTE	"Written by: Kevin Kuei",13,10,13,10
+		BYTE	"Please provide 10 signed decimal integers.",13,10  
+		BYTE	"Each number needs to be small enough to fit inside a 32 bit register. After you have",13,10
+		BYTE	"finished inputting the raw numbers I will display a list of the integers, their sum,",13,10
+		BYTE	"and their average value.",13,10,13,10,0 
 promptTxt	BYTE	"Please enter an signed number: ",0
 errorTxt	BYTE	"ERROR: You did not enter a signed number or your number was too big.",13,10
         	BYTE	"Please try again: ",0 
