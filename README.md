@@ -61,8 +61,8 @@ int convertToASCII(int N)
 Given a signed SDWORD value of +240, the `SDWORD` would hence be converted to ascii as follows:
 
 ```
-		240 -> 	 2 		 4 		 0		 digits
-				      (50)	(52)	(48)	ascii
+240 -> 	 2 	 4 	 0	digits
+	(50)	(52)	(48)	ascii
 ```
 
 However, the digits would be returned in reverse order, i.e. 240 gets returned as (48)'0', (52)'4', (50)'2'. Then, the array needs to either be reversed by copying it in another array, or reading the array in reverse. 
