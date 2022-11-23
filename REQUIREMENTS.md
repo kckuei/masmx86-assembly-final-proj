@@ -1,81 +1,25 @@
-# MASM x86 Assembly Final Project
-Final project written in MASM x86 asssembly that implements and demonstrates two procedures which emulate the Irvine library functions `ReadInt` and `WriteInt`. 
+# Project Requirements 
 
-## Program Description
-Implements a program that reads in 10 signed decimal integers, validates and converts them from their [ascii](https://www.asciitable.com/) representation and stores them in a `SDWORD` array, performs computations with them, and then echos the input values and results to console by converting the `SDWORD`s back to their ascii representation.
+## Introduction
+This program, the portfolio project for the class, is the final step up in difficulty. The purpose of this assignment is to reinforce concepts related to string primitive instructions and macros.
+  1. Designing, implementing, and calling low-level I/O procedures
+  2. Implementing and using macros.
 
-The program implements two helper macros, `mGetString` and `mDisplayString`. `mGetString` prompts, gets and returns user input as an ascii string. `mDisplayString` takes a supplied ascii string, and prints it.  The two macros work in concert with two procedures `ReadVal` and `WriteVal`, which essessentially replace the Irvine procedures, `ReadInt` and `WriteInt`, respectively.
-
-`ReadVal` works by taking the return ascii string from invoking `mGetString`, converting it to a `SDWORD`, validating, and then returning it.  `WriteVal` works by taking passed `SDWORD` values, converting them to ascii strings or `BYTE` arrays, and then printing the strings by invoking `mDisplayString`.
- 
-## Implementation Notes
-
-### ReadVal Implementation
-Converts an ascii string to SDWORD using the following algorithm as reference, written in a high-level programming language (python):
-
-```python
- numInt = 0
-  get numString
-  for numChar in numString:
-    if 48 <= numChar <= 57:
-      numInt = 10 * numInt + (numChar - 48)
-    else:
-      break
-```
-
-For example, an input ascii string of '109' would be parsed to a SDWORD in the following manner:
-```
-‘1’ = (49)
-49 - 48 = 1
-numInt = 10 x (0) + 1 = 1
-‘0’ = 48
-48 - 48 = 0
-numInt = 10 x ( 1 ) + 0 = 10
-‘9’ = 57
-57 - 48 = 9
-numInt = 10 x ( 10 ) + 9 = 109
-```
-
-In the above code, `numInt` acts like an accumulator register, which gets multiplied by 10 each iteration to advance the digits place we are inserting into.
-
-#### Signs
-To consider sign, simply check on the first ascii character if it is (45)'-' or (43)'+', and save the value accordingly.
-
-#### Input Validation
-In addition to checking for a sign value on the first character, subsequent digits should should verify that ascii values are between 48-47 (digits 0-9). 
-
-Since the feasible range for an `SDWORD` is 2^-31 to 2^31-1 (-2,147,483,648 to +2,147,483,647), a crude and incomplete initial validate step is allow up to 11 characters to be read, including the sign character. 
-
-The range, however, would still need to be checked.
-
-### WriteVal Implementation
-Converts an SDWORD to ascii string using the following [algorithm](https://www.geeksforgeeks.org/program-to-print-ascii-value-of-all-digits-of-a-given-number/) as reference, written in a high-level programming language (C++):
-
-```c++
-int convertToASCII(int N)
-{
-    while (N > 0) {
-        int d = N % 10;
-        cout << d << " ("
-             << d + 48 << ")\n";
- 
-        N = N / 10;
-    }
-}
-```
-
-Given a signed `SDWORD` value of +240, the `SDWORD` would hence be converted to ascii as follows:
-
-```
-240 -> 	 2 	 4 	 0	digits
-	(50)	(52)	(48)	ascii
-```
-
-However, according to the algorithm above, the digits would be returned in reverse order, i.e. 240 gets returned as (48)'0', (52)'4', (50)'2'. Hence, the array needs to either be reversed by copying it in another array, or reading the array in reverse when printing.
-
-#### Signs
-To consider sign, prepend/append an ascii (45)'-' in the event the `SDWORD` is signed.
-
-
-## Program Requirements
-The program requirements are detailed in the the REQUIREMENTS.MD.
+## What you must do
+### Program Description
+* Implement and test two macros for string processing. These macros should use Irvine’s ReadString to get input from the user, and WriteString procedures to display output. 
+	* mGetString :  Display a prompt (input parameter, by reference), then get the user’s keyboard input into a memory location (output parameter, by reference). You may also need to provide a count (input parameter, by value) for the length of input string you can accommodate and a provide a number of bytes read (output parameter, by reference) by the macro.
+	* mDisplayString :  Print the string which is stored in a specified memory location (input parameter, by reference).
+* Implement and test two procedures for signed integers which use string primitive instructions
+	* ReadVal : 
+	  1. Invoke the mGetString macro (see parameter requirements above) to get user input in the form of a string of digits.
+	  2. Convert (using string primitives) the string of ascii digits to its numeric value representation (SDWORD), validating the user’s input is a valid number (no letters, symbols, etc).
+	  3. Store this one value in a memory variable (output parameter, by reference). 
+	* WriteVal : 
+	  1. Convert a numeric SDWORD value (input parameter, by value) to a string of ASCII digits.
+	  2. Invoke the mDisplayString macro to print the ASCII representation of the SDWORD value to the output.
+* Write a test program (in main ) which uses the ReadVal and WriteVal procedures above to:
+  1. Get 10 valid integers from the user. Your ReadVal will be called within the loop in main . Do not put your counted loop within ReadVal .
+  2. Stores these numeric values in an array.
+  3. Display the integers, their sum, and their truncated average.
+* Your ReadVal will be called within the loop in main . Do not put your counted loop within ReadVal. 
