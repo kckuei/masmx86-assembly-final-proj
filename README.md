@@ -4,7 +4,7 @@ Final project written in MASM x86 asssembly that implements and demonstrates two
 ## Program Description
 Implements a program that reads in 10 signed decimal integers, validates and converts them from their [ascii](https://www.asciitable.com/) representation and stores them in a `SDWORD` array, performs computations with them, and then echos the input values and results to console by converting the `SDWORD`s back to their ascii representation.
 
-The program implements two helper macros, `mGetString` and `mDisplayString`. `mGetString` prompts, gets and returns user input as an ascii string. `mDisplayStrin`g takes a supplied ascii string, and prints it.  The two macros work in concert with two procedures `ReadVal` and `WriteVal`, which essessentially replace the Irvine procedures, `ReadInt` and `WriteInt`, respectively.
+The program implements two helper macros, `mGetString` and `mDisplayString`. `mGetString` prompts, gets and returns user input as an ascii string. `mDisplayString` takes a supplied ascii string, and prints it.  The two macros work in concert with two procedures `ReadVal` and `WriteVal`, which essessentially replace the Irvine procedures, `ReadInt` and `WriteInt`, respectively.
 
 `ReadVal` works by taking the return ascii string from invoking `mGetString`, converting it to a `SDWORD`, validating, and then returning it.  `WriteVal` works by taking passed `SDWORD` values, converting them to ascii strings or `BYTE` arrays, and then printing the strings by invoking `mDisplayString`.
  
