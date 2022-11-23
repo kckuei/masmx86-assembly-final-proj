@@ -1,5 +1,5 @@
 # MASM x86 Assembly Final Project
-Implements and demonstrates two procedures written in MASMx86 that emulate the Irvine library functions `ReadInt` and `WriteInt`. 
+Implements and demonstrates two procedures written in MASMx86 asssembly that emulate the Irvine library functions `ReadInt` and `WriteInt`. 
 
 ## Program Description
 Implements a program that reads in 10 signed decimal integers, validates and converts them from their [ascii](https://www.asciitable.com/) representation and stores them in a `SDWORD` array, performs computations with them, and then echos the input values and results to console by converting the `SDWORD`s back to their ascii representation.
