@@ -6,12 +6,12 @@ Implements a program that reads in 10 signed decimal integers, validates and con
 
 The program implements two helper macros, `mGetString` and `mDisplayString`. `mGetString` prompts, gets and returns user input as an ascii string. `mDisplayStrin`g takes a supplied ascii string, and prints it.  The two macros work in concert with two procedures `ReadVal` and `WriteVal`, which essessentially replace the Irvine procedures, `ReadInt` and `WriteInt`, respectively.
 
-`ReadVal` works by taking the return ascii string from invoking `mGetString`, converting it to a `SDWORD`, validating it, then returning it to the main scope where it gets saved to a `SDWORD` array.  `WriteVal` works by taking passed `SDWORD` values, converting them to ascii strings or `BYTE` arrays, and then printing the strings by invoking `mDisplayString`.
+`ReadVal` works by taking the return ascii string from invoking `mGetString`, converting it to a `SDWORD`, validating, and then returning it.  `WriteVal` works by taking passed `SDWORD` values, converting them to ascii strings or `BYTE` arrays, and then printing the strings by invoking `mDisplayString`.
  
-## Other Implementation Notes
+## Implementation Notes and Concepts
 
 ### ReadVal Implementation
-Converts an ascii string to SDWORD using the following algorithm, written in high-level language (python):
+Converts an ascii string to SDWORD using the following algorithm, written in a high-level programming language (python):
 
 ```python
  numInt = 0
@@ -23,7 +23,7 @@ Converts an ascii string to SDWORD using the following algorithm, written in hig
       break
 ```
 
-For example, an input string of '109' would be processed in the following manner:
+For example, an input ascii string of '109' would be parsed to a SDWORD in the following manner:
 ```
 ‘1’ = (49)
 49 - 48 = 1
@@ -35,6 +35,9 @@ numInt = 10 x ( 1 ) + 0 = 10
 57 - 48 = 9
 numInt = 10 x ( 10 ) + 9 = 109
 ```
+
+`numInt` functions like an accumulator register, which gets multiplied by 10 each iteration to advance the digits place we are inserting into.
+
 
 ### WriteVal Implementation
 Converts an SDWORD to ascii string using the algorithm detailed [here](https://www.geeksforgeeks.org/program-to-print-ascii-value-of-all-digits-of-a-given-number/).
