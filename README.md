@@ -36,7 +36,7 @@ numInt = 10 x ( 1 ) + 0 = 10
 numInt = 10 x ( 10 ) + 9 = 109
 ```
 
-`numInt` functions like an accumulator register, which gets multiplied by 10 each iteration to advance the digits place we are inserting into.
+In the above code, `numInt` acts like an accumulator register, which gets multiplied by 10 each iteration to advance the digits place we are inserting into.
 
 #### Signs
 To consider sign, simply check on the first ascii character if it is (45)'-' or (43)'+', and save the value accordingly.
