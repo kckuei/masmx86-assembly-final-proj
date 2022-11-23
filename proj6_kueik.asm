@@ -2,11 +2,7 @@ TITLE Project 6 - String Primitives and Macros     (proj6_kueik.asm)
 
 ; Author: 					Kevin Kuei
 ; Last Modified:			November 23, 2022
-; OSU email address: 		kueik@oregonstate.edu
-; Course number/section:   	CS271 Section
-; Project Number:			6                 
-; Due Date:					December 4th, 2022
-; Description:				CS-271 Final Class Portfolio Project
+; Description:				Assembly Final Project
 ; 
 ; A program that reads in 10 signed decimal integers, validates and converts them from their
 ; ascii representation to SDWORDs, performs calculations with them, and then echos the input
