@@ -1,6 +1,6 @@
 TITLE Project 6 - String Primitives and Macros     (proj6_kueik.asm)
 
-; Author: 					Kevin Kuei
+; Author: 				Kevin Kuei
 ; Last Modified:			November 23, 2022
 ; Description:				Assembly Final Project
 ; 
@@ -94,7 +94,7 @@ mGetString MACRO  m_promptAddr:REQ, m_userStringAddr:REQ, m_bytesReadAddr:REQ
   CALL	WriteString
 
   ; Reads user input.
-  MOV	ECX, MAXSIZE 			; Buffer size, bytes read will be <= buffer size.
+  MOV	ECX, MAXSIZE 		; Buffer size, bytes read will be <= buffer size.
   MOV	EDX, m_userStringAddr	; Destination address.
   CALL	ReadString
 
@@ -138,8 +138,8 @@ ENDM
 
 
 ; Declare global constants.
-MAXSIZE		=		100				; Max buffer size for user input.
-MAXARRSIZE	=		10				; Max signed integer array size.
+MAXSIZE		=		100			; Max buffer size for user input.
+MAXARRSIZE	=		10			; Max signed integer array size.
 
 
 ; Declare data segment variables (only referenced directly in main PROC).
@@ -240,8 +240,8 @@ _loopSum:
   ;  Computes the truncated average by integer divison.
   MOV	EAX, userSum				; The quotient in EAX.
   MOV	EBX, MAXARRSIZE				; The divisor in EBX.
-  CDQ								; For 32-bit divison, EAX must be sign-extended into EDX.
-  IDIV	EBX							; Signed integer division. Quotient in EAX.
+  CDQ						; For 32-bit divison, EAX must be sign-extended into EDX.
+  IDIV	EBX					; Signed integer division. Quotient in EAX.
   MOV	userAvg, EAX
   ;  Prints the truncated average.
   PUSH	userAvg
@@ -288,12 +288,12 @@ main ENDP
 ; ---------------------------------------------------------------------------------
 ReadVal PROC
   ; Declares local variables.
-  LOCAL	l_bytesRead:DWORD				; local DWORD bytesRead, used in MACRO call.
+  LOCAL	l_bytesRead:DWORD			; local DWORD bytesRead, used in MACRO call.
   LOCAL	l_userString[MAXSIZE]:BYTE		; local BYTE array userString, used in MACRO call.
-  LOCAL l_numInt:DWORD					; local DWORD numInt, used for ascii calc.
+  LOCAL l_numInt:DWORD				; local DWORD numInt, used for ascii calc.
   LOCAL l_numIntSigned:SDWORD			; local SDWORD numInt, used for ascii calc.
-  LOCAL l_numChar:DWORD					; local DWORD numChar, used for ascii calc.
-  LOCAL	l_signFlag:DWORD				; local DWORD signFlag, used for ascii calc.
+  LOCAL l_numChar:DWORD				; local DWORD numChar, used for ascii calc.
+  LOCAL	l_signFlag:DWORD			; local DWORD signFlag, used for ascii calc.
   LOCAL l_temp:QWORD
   
   ; Preserves flags and registers.
@@ -304,7 +304,7 @@ ReadVal PROC
   LEA	EAX, l_userString
   LEA	EBX, l_bytesRead
   mGetString [EBP+16], EAX, EBX			; Returns user input in l_userString
-										; Returns bytes read in l_bytesRead
+						; Returns bytes read in l_bytesRead
   
   ; Validates the string and converts from ascii to SDWORD.
   ;
@@ -334,15 +334,15 @@ _asciiToSDWORD:
 
   ;  Initialize loop parameters.
   MOV	l_numInt, 0				; Initialize local numInt = 0.
-  MOV	l_signFlag, 0			; Initialize local signFlag = 0 for positive (1 for negative).
-  MOV	ECX, l_bytesRead		; Loop counter set to local bytesRead.
-  LEA	EAX, l_userString		; Put local effective address of userString in ESI.
+  MOV	l_signFlag, 0				; Initialize local signFlag = 0 for positive (1 for negative).
+  MOV	ECX, l_bytesRead			; Loop counter set to local bytesRead.
+  LEA	EAX, l_userString			; Put local effective address of userString in ESI.
   MOV	ESI, EAX				;
-  CLD							; Clear direction flag (increments ESI).
+  CLD						; Clear direction flag (increments ESI).
 
  ;  Begin main loop over the string characters. 
 _loopString:
-	  LODSB						; Loads a byte from ESI into AL, and decrements ESI.
+	  LODSB					; Loads a byte from ESI into AL, and decrements ESI.
 
 	; Performs a check for sign entries (+/-) on the first character. If a sign value, sets
 	; the local mem sign flag l_signFlag, and skips to end of loop at _endDigitsCheck.  All 
@@ -350,45 +350,45 @@ _loopString:
 	_checkFirstChar:
 	  ; Checks if first character.
 	  CMP	ECX, l_bytesRead
-	  JNE	_digitsCheck		; Jumps if not the first character.
+	  JNE	_digitsCheck			; Jumps if not the first character.
 	  
 	  ; Otherwise, consider a sign check when its the first character. 
 	_positiveSign:
 	  ; Check if ascii value 43 (corresponds to +).
 	  CMP	AL, 43
-	  JNE	_negativeSign		; Jumps if not +.
+	  JNE	_negativeSign			; Jumps if not +.
 	  JMP	_endDigitsCheck
 	
 	_negativeSign:
 	  ; Otherwise, check if ascii value 45 (corresponds to -).
 	  CMP	AL, 45
-	  JNE	_digitsCheck		; Jumps if not -.
-	  MOV	l_signFlag, 1		; Sets the sign flag to 1 (negative).
+	  JNE	_digitsCheck			; Jumps if not -.
+	  MOV	l_signFlag, 1			; Sets the sign flag to 1 (negative).
 	  JMP	_endDigitsCheck
 	
 	; Performs checks on whether ascii values are valid digits 0-9.
 	_digitsCheck:
 	  ; Checks if below ascii value 48.
-	  CMP	AL, 48			; digit 0
+	  CMP	AL, 48				; digit 0
 	  JL	_rePrompt
 	
 	  ; Checks if above ascii value 57.
-	  CMP	AL, 57			; digit 9
+	  CMP	AL, 57				; digit 9
 	  JG	_rePrompt
 	
 	  ; Otherwise, its a valid digit. Then convert from ascii value to integer
 	  ; by the following iterative algorithm:  NumInt = 10 * NumInt + (NumChar - 48)
 	  ;  Fetch the current character ascii value into local numChar.
 	  MOVZX	EDX, AL				; Zero-extend NumChar from AL to into EDX.
-	  MOV	l_numChar, EDX		; Copy to local numChar.
+	  MOV	l_numChar, EDX			; Copy to local numChar.
 	
 	  ;  Perform calculations in accumulator EAX.
 	  MOV	EAX, 10			
 	  MUL	l_numInt			; 10 * numInt in EAX.
-	  ADD	EAX, l_numChar		; Adds numChar to EAX.
+	  ADD	EAX, l_numChar			; Adds numChar to EAX.
 	  SUB	EAX, 48				; Subtract 48 from EAX.
 
-	  MOV	l_numInt, EAX		; Update numInt for next iter.
+	  MOV	l_numInt, EAX			; Update numInt for next iter.
 	_endDigitsCheck:
 	  LOOP	_loopString			; Decrements ECX and jumps until ECX = 0.
 	
@@ -401,13 +401,13 @@ _endLoop:
   ; Apply the sign, if applicable.
   CMP	l_signFlag, 0
   JE	_return					; Jumps if zero (+).
-  NEG	l_numIntSigned			; Flip the sign of local numInt.
+  NEG	l_numIntSigned				; Flip the sign of local numInt.
 
 _return:
   ; Save validated value to destination address.
-  MOV   EDI, [EBP+8]			; Destination address in EDI.
-  MOV   EAX, l_numIntSigned		; Signed integer in EAX.
-  STOSD							; Copies from EAX to mem address pointed by EDI.
+  MOV   EDI, [EBP+8]				; Destination address in EDI.
+  MOV   EAX, l_numIntSigned			; Signed integer in EAX.
+  STOSD						; Copies from EAX to mem address pointed by EDI.
 
   ; Restore flags and registers.
   POPFD
@@ -445,12 +445,12 @@ ReadVal ENDP
 WriteVal PROC
   ; Declare local variables.
   LOCAL	l_outStringArr[MAXARRSIZE+1]:BYTE	; local BYTE string array outStringArr for storing ascii values.
-  LOCAL l_revStringArr[MAXARRSIZE+1]:BYTE   ; local BYTE string array revStringArr for storing reversed array.
-  											;   size is MAXARRSIZE+1 to consider the sign.
-  LOCAL	l_charCount:DWORD					; local DWORD charCount for max character count of signed int.
-  LOCAL l_N_signed:SDWORD					; local SDWORD N_signed, for checking initial sign of passed value.
-  LOCAL	l_N:DWORD							; local DWORD N, for calculating the ascii digits.
-  LOCAL	l_sign:DWORD						; local DWORD sign, flag used for determining whether to prepend '-'.
+  LOCAL l_revStringArr[MAXARRSIZE+1]:BYTE   	; local BYTE string array revStringArr for storing reversed array.
+  						;   size is MAXARRSIZE+1 to consider the sign.
+  LOCAL	l_charCount:DWORD			; local DWORD charCount for max character count of signed int.
+  LOCAL l_N_signed:SDWORD			; local SDWORD N_signed, for checking initial sign of passed value.
+  LOCAL	l_N:DWORD				; local DWORD N, for calculating the ascii digits.
+  LOCAL	l_sign:DWORD				; local DWORD sign, flag used for determining whether to prepend '-'.
 
   ; Preserve flags and registers.
   PUSHAD
@@ -458,17 +458,17 @@ WriteVal PROC
 
   ; Initialize character count and sign flag.
   MOV	l_charCount, 0
-  MOV	l_sign, 0					; 0 for positive.
+  MOV	l_sign, 0				; 0 for positive.
 
   ; Checks and sets a sign flag for the passed SDWORD. 
   ;  Copies the SDWORD from stack to local mem l_N_signed, and checks its sign.
   MOV	EAX, [EBP + 8]
   MOV	l_N_signed, EAX
   CMP	l_N_signed, 0				
-  JGE	_next						; Jumps if positive value.
+  JGE	_next					; Jumps if positive value.
   ;  Sets ths sign flag if it is negative.
-  MOV	l_sign, 1					; 1 for negative.
-  NEG	l_N_signed					; Two's negation for negative.
+  MOV	l_sign, 1				; 1 for negative.
+  NEG	l_N_signed				; Two's negation for negative.
 
   ; Main routine for converting SDWORD to ascii values. Each of the SDWORD digits will be converted 
   ; to its ascii equivalent and stored in byte array l_outStringArr. This results in a byte 
@@ -483,12 +483,12 @@ _next:
   ;  Populates the array with ascii values (digits 0-9).
 _loopAsciiDigits:
 	  ; Perform signed integer division, N // 10 to get quotient and remainder. 
-	  MOV	EAX, l_N				; The quotient (local N) in EAX.
-	  MOV	EBX, 10					; The divisor in EBX.
-	  CDQ							; For 32-bit divison, EAX must be sign-extended into EDX.
-	  IDIV	EBX						; Signed integer division. 
-									; Quotient in EAX. N gets updated to equal the quotient.
-									; Remainder in EDX. Remainder gets stored in the array.
+	  MOV	EAX, l_N			; The quotient (local N) in EAX.
+	  MOV	EBX, 10				; The divisor in EBX.
+	  CDQ					; For 32-bit divison, EAX must be sign-extended into EDX.
+	  IDIV	EBX				; Signed integer division. 
+						; Quotient in EAX. N gets updated to equal the quotient.
+						; Remainder in EDX. Remainder gets stored in the array.
 
 	  ; Shift the remainder by 48 to get its ascii representation (0 starts at ascii value 48).
 	  ADD	EDX, 48
@@ -497,11 +497,11 @@ _loopAsciiDigits:
 	  MOV	l_N, EAX
 
 	  ; Stores the remainder on the array (current address pointer in EDI).
-	  MOV	EAX, EDX				; Copies remainder to accumulator EAX.
+	  MOV	EAX, EDX			; Copies remainder to accumulator EAX.
 	  CLD
-	  STOSB							; Copies byte from accumulator AL to mem address in EDI.
-									; Then increments EDI.
-	  INC	l_charCount				; Increments the character account.
+	  STOSB					; Copies byte from accumulator AL to mem address in EDI.
+						; Then increments EDI.
+	  INC	l_charCount			; Increments the character account.
 
 	  ; Check loop exit condition.
 	  CMP	l_N, 0
@@ -510,13 +510,13 @@ _loopAsciiDigits:
   ;  Append ascii value (45)'-' if negative. We add the sign at the end of the string
   ;  since the digits are saved in reverse order.
   CMP	l_sign, 0
-  JE	_skipSign					; Jumps/skips prepending if sign is zero (positive). 
+  JE	_skipSign				; Jumps/skips prepending if sign is zero (positive). 
 
-  MOV	AL, 45						; (45)'-' in AL (one byte).
-  CLD								; Clears direction flag (increments).
-  STOSB								; Copies the byte in AL to address in EDI.
-									; Then increments EDI to move to next array value.
-  INC	l_charCount					; Increments the character account.
+  MOV	AL, 45					; (45)'-' in AL (one byte).
+  CLD						; Clears direction flag (increments).
+  STOSB						; Copies the byte in AL to address in EDI.
+						; Then increments EDI to move to next array value.
+  INC	l_charCount				; Increments the character account.
 _skipSign:
 
   ; Recall the ascii values in l_outStringArr are in reverse order. Reverse the ordering
