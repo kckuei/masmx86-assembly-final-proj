@@ -41,10 +41,12 @@ In the above code, `numInt` acts like an accumulator register, which gets multip
 #### Signs
 To consider sign, simply check on the first ascii character if it is (45)'-' or (43)'+', and save the value accordingly.
 
-### Validation
+#### Input Validation
 In addition to checking for a sign value on the first character, subsequent digits should should verify that ascii values are between 48-47 (digits 0-9). 
 
-Since the feasible range for an `SDWORD` is 2^-31 to 2^31-1 (-2,147,483,648 to +2,147,483,647), a crude and incomplete initial validate step is allow up to 11 characters to be read, including the sign character. The range would still need to be checked.
+Since the feasible range for an `SDWORD` is 2^-31 to 2^31-1 (-2,147,483,648 to +2,147,483,647), a crude and incomplete initial validate step is allow up to 11 characters to be read, including the sign character. 
+
+The range, however, would still need to be checked.
 
 ### WriteVal Implementation
 Converts an SDWORD to ascii string using the following [algorithm](https://www.geeksforgeeks.org/program-to-print-ascii-value-of-all-digits-of-a-given-number/) as reference, written in a high-level programming language (C++):
