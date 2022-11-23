@@ -41,6 +41,10 @@ In the above code, `numInt` acts like an accumulator register, which gets multip
 #### Signs
 To consider sign, simply check on the first ascii character if it is (45)'-' or (43)'+', and save the value accordingly.
 
+### Validation
+In addition to checking for a sign value on the first character, subsequent digits should should verify that ascii values are between 48-47 (digits 0-9). 
+
+Since the feasible range for an `SDWORD` is 2^-31 to 2^31-1 (-2,147,483,648 to +2,147,483,647), a crude and incomplete initial validate step is allow up to 11 characters to be read, including the sign character. The range would still need to be checked.
 
 ### WriteVal Implementation
 Converts an SDWORD to ascii string using the following [algorithm](https://www.geeksforgeeks.org/program-to-print-ascii-value-of-all-digits-of-a-given-number/) as reference, written in a high-level programming language (C++):
@@ -58,14 +62,14 @@ int convertToASCII(int N)
 }
 ```
 
-Given a signed SDWORD value of +240, the `SDWORD` would hence be converted to ascii as follows:
+Given a signed `SDWORD` value of +240, the `SDWORD` would hence be converted to ascii as follows:
 
 ```
 240 -> 	 2 	 4 	 0	digits
 	(50)	(52)	(48)	ascii
 ```
 
-However, the digits would be returned in reverse order, i.e. 240 gets returned as (48)'0', (52)'4', (50)'2'. Then, the array needs to either be reversed by copying it in another array, or reading the array in reverse. 
+However, according to the algorithm above, the digits would be returned in reverse order, i.e. 240 gets returned as (48)'0', (52)'4', (50)'2'. Hence, the array needs to either be reversed by copying it in another array, or reading the array in reverse when printing.
 
 #### Signs
 To consider sign, prepend/append an ascii (45)'-' in the event the `SDWORD` is signed.
