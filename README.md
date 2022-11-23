@@ -7,6 +7,46 @@ Implements a program that reads in 10 signed decimal integers, validates and con
 The program implements two helper macros, `mGetString` and `mDisplayString`. `mGetString` prompts, gets and returns user input as an ascii string. `mDisplayString` takes a supplied ascii string, and prints it.  The two macros work in concert with two procedures `ReadVal` and `WriteVal`, which essessentially replace the Irvine procedures, `ReadInt` and `WriteInt`, respectively.
 
 `ReadVal` works by taking the return ascii string from invoking `mGetString`, converting it to a `SDWORD`, validating, and then returning it.  `WriteVal` works by taking passed `SDWORD` values, converting them to ascii strings or `BYTE` arrays, and then printing the strings by invoking `mDisplayString`.
+
+### Example Execution
+
+```
+PROGRAMMING ASSIGNMENT 6: Designing low-level I/O procedures
+Written by: Kevin Kuei
+
+Please provide 10 signed decimal integers.
+Each number needs to be small enough to fit inside a 32 bit register. After you have
+finished inputting the raw numbers I will display a list of the integers, their sum,
+and their average value.
+
+Please enter an signed number:
+ERROR: You did not enter a signed number or your number was too big.
+Please try again: =67-
+ERROR: You did not enter a signed number or your number was too big.
+Please try again: 37373kdfdfhjdf
+ERROR: You did not enter a signed number or your number was too big.
+Please try again: 1234567890987654323456789
+ERROR: You did not enter a signed number or your number was too big.
+Please try again: -+23232
+ERROR: You did not enter a signed number or your number was too big.
+Please try again: 156
+Please enter an signed number: 34
+Please enter an signed number: -186
+Please enter an signed number: -145
+Please enter an signed number: 16
+Please enter an signed number: +23
+Please enter an signed number: 51
+Please enter an signed number: 0
+Please enter an signed number: 56
+Please enter an signed number: 11
+
+You entered the following numbers:
+156, 34, -186, -145, 16, 23, 51, 0, 56, 11
+The sum of these numbers is: 16
+The truncated average is: 1
+
+Thanks for playing!
+```
  
 ## Implementation Notes
 
