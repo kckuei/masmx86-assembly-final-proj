@@ -119,3 +119,80 @@ To consider sign, prepend/append an ascii (45)'-' in the event the `SDWORD` is s
 
 ## Program Requirements
 The program requirements are detailed in the the REQUIREMENTS.MD.
+
+## Reflection and Conceptual Errors
+In working on this project, some pretty simple yet annoying mistakes I made were in my attempts to pass single value results from procedures back to main (both for integer and floating point implementations). What I thought were disparate/seperate issues all turned out to be the same basic issue of not 'double-dereferencing' my addresses. 
+
+For example, suppose we want to return a value from a procedure called withih main, passing in one stack parameter of the return address for a return value using the stdcall method...
+
+If working with integers, in general AVOID things like:
+
+```assembly
+MOV EBX, localIntVal
+MOV [EBP+8], EBX
+```
+But DO things like:
+
+```assembly
+; Using move
+MOV EBX, [EBP+8]
+MOV EAX, localIntVal
+MOV [EBX], EAX
+
+; Using string primitives
+MOV EDI, [EBP+8]
+MOV EAX, localIntVal
+STOSD
+```
+
+Similarly, with floating point values, in general AVOID doing:
+
+```assembly
+FINIT
+FST localIntVal
+FST REAL PTR [EBP+8]
+```
+
+But Do things like:
+
+```assembly
+MOV EDI, [EBP+8]
+FINIT
+FST localIntVal
+FST REAL PTR [EDI]
+```
+
+
+## Floating Point Unit Implementation (Extra Credit)
+I also re-attmpted the project using FPU instructions in order to read and write floating point numbers. I got as far as implementing a `ReadFloatVal` procedure to do essentially what Irvine's `ReadFloat` procedure does, but wasn't able to finish my implementation of `WriteFloatVal` to replace Irvine's `WriteFloat`. 
+
+Example output of the unfinished program using my implementation of `ReadFloatVal`, but Irvine's `WriteFloatVal` below:
+
+```assembly
+PROGRAMMING ASSIGNMENT 6: Designing low-level I/O procedures
+Written by: Kevin Kuei
+
+Please provide 10 floating point numbers.
+Each number needs to be small enough to fit inside a 32 bit register. After you have
+finished inputting the raw numbers I will display a list of the integers, their sum,
+and their average value.
+
+Please enter an signed number: -1.1
+Please enter an signed number: 2.2
+Please enter an signed number: -3.3
+Please enter an signed number: 4.4
+Please enter an signed number: 5.5
+Please enter an signed number: 6.6
+Please enter an signed number: 7.7
+Please enter an signed number: 8.8
+Please enter an signed number: 9.9
+Please enter an signed number: 10.10
+
+You entered the following numbers:
+-1.1000000E+000, +2.2000000E+000, -3.3000000E+000, +4.4000000E+000, +5.5000000E+000, +6.6000000E+000, +7.7000000E+000, +8.8000000E+000, +9.9000000E+000, +1.0100000E+001
+The sum of these numbers is: +5.0800000E+001
+The floating point average is: +5.0800000E+000
+
+Thanks for playing!
+```
+
