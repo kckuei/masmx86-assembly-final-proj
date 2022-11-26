@@ -123,7 +123,7 @@ The program requirements are detailed in the the [REQUIREMENTS.MD](https://githu
 ## Reflection and Conceptual Errors
 In working on this project, some pretty simple yet annoying mistakes I made were in my attempts to pass single value results from procedures back to main (both for integer and floating point implementations). What I thought were disparate/seperate issues all turned out to be the same basic issue of not 'double-dereferencing' my addresses. 
 
-For example, suppose we want to return a value from a procedure called withih main, passing in one stack parameter of the return address for a return value using the stdcall method...
+For example, suppose we want to return a value from a procedure called withih main, passing in one stack parameter of the return address for a return value using the stdcall approach.
 
 If working with integers, in general AVOID things like:
 
