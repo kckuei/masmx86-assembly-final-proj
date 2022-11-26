@@ -118,7 +118,7 @@ To consider sign, prepend/append an ascii (45)'-' in the event the `SDWORD` is s
 
 
 ## Program Requirements
-The program requirements are detailed in the the [REQUIREMENTS.MD](./REQUIREMENTS.MD).
+The program requirements are detailed in the the [REQUIREMENTS.MD](https://github.com/kckuei/masmx86-assembly-final-proj/blob/main/REQUIREMENTS.md).
 
 ## Reflection and Conceptual Errors
 In working on this project, some pretty simple yet annoying mistakes I made were in my attempts to pass single value results from procedures back to main (both for integer and floating point implementations). What I thought were disparate/seperate issues all turned out to be the same basic issue of not 'double-dereferencing' my addresses. 
