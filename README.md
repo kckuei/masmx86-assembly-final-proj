@@ -215,9 +215,10 @@ Thanks for playing!
 Some ideas for tackling this would be to somehow parse the decimal integer from fractional digits:
 
 ```
-E.g., given 123.456 
+E.g., 
+Given 123.456 
 
-integer part
+integer part            REM     QUOT
 123 / 10  		3	12	
 12 / 10			2	1
 1 / 10			1	0
