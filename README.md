@@ -233,8 +233,8 @@ gives fractional integers 4, 5, 6
 Assemble 1, 2, 3 . 4, 5, 6
 ```
 
-Another idea was to try accessing the sign, exponent, and mantissa bits of a float directly (e.g. [link1](http://www.website.masmforum.com/tutorials/fptute/fpuchap2.htm), [link2]( https://stackoverflow.com/questions/15238467/get-the-first-bit-of-the-eax-register-in-x86-assembly-language)), then doing some calculations to recover the decimal representations. Frankly, we just didn't cover this enough at the end of the class. 
+Another idea was to try accessing the sign, exponent, and mantissa bits of a float directly (e.g. [link1](http://www.website.masmforum.com/tutorials/fptute/fpuchap2.htm), [link2]( https://stackoverflow.com/questions/15238467/get-the-first-bit-of-the-eax-register-in-x86-assembly-language)), then doing some calculations to recover the decimal representations. Frankly, we just didn't cover this enough at the end of the class to make much progress. 
 
 ### Additional Resources
-; https://docs.oracle.com/cd/E18752_01/html/817-5477/eoizy.html
-; https://cs.fit.edu/~mmahoney/cse3101/float.html
+* https://docs.oracle.com/cd/E18752_01/html/817-5477/eoizy.html
+* https://cs.fit.edu/~mmahoney/cse3101/float.html
