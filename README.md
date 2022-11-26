@@ -162,6 +162,16 @@ FST localIntVal
 FST REAL PTR [EDI]
 ```
 
+or pass the parameter via the FPU stack.
+
+```assembly
+FINIT
+PUSH OFFSET txt1
+PUSH OFFSET txt2
+PUSH val1
+CALL myRroc      ; Return value on FPU stack, FT(0).
+```
+
 
 ## Floating Point Unit Implementation (Extra Credit)
 I also re-attmpted the project using FPU instructions in order to read and write floating point numbers. I got as far as implementing a `ReadFloatVal` procedure to do essentially what Irvine's `ReadFloat` procedure does, but wasn't able to finish my implementation of `WriteFloatVal` to replace Irvine's `WriteFloat`. 
