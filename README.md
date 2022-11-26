@@ -212,3 +212,28 @@ The floating point average is: +5.0800000E+000
 Thanks for playing!
 ```
 
+Some ideas for tackling this would be to somehow parse the decimal integer from fractional digits:
+
+```
+E.g., given 123.456 
+
+integer part
+123 / 10  		3	12	
+12 / 10			2	1
+1 / 10			1	0
+gives integers 	3, 2, 1, which can be reversed to 1, 2, 3
+
+fractional apart
+0.456 * 10			4.56
+0.56 * 10			5.6
+0.6 * 10			6.0
+gives fractional integers 4, 5, 6
+
+Assemble 1, 2, 3 . 4, 5, 6
+```
+
+Another idea was to try accessing the sign, exponent, and mantissa bits of a float directly (e.g. [link1](http://www.website.masmforum.com/tutorials/fptute/fpuchap2.htm), [link2]( https://stackoverflow.com/questions/15238467/get-the-first-bit-of-the-eax-register-in-x86-assembly-language)), then doing some calculations to recover the decimal representations. Frankly, we just didn't cover this enough at the end of the class. 
+
+### Additional Resources
+; https://docs.oracle.com/cd/E18752_01/html/817-5477/eoizy.html
+; https://cs.fit.edu/~mmahoney/cse3101/float.html
