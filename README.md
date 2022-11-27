@@ -234,19 +234,21 @@ The floating point average is: +5.0800000E+000
 Thanks for playing!
 ```
 
-My initial idea was to try accessing the [sign, exponent, and mantissa](https://en.wikipedia.org/wiki/IEEE_754) bits of a float directly (e.g. [link1](http://www.website.masmforum.com/tutorials/fptute/fpuchap2.htm), [link2]( https://stackoverflow.com/questions/15238467/get-the-first-bit-of-the-eax-register-in-x86-assembly-language)), then doing some calculations to recover the decimal representations.
+My initial idea for implementing the `WriteFloatVal` procedure was to try accessing the [sign, exponent, and mantissa](https://en.wikipedia.org/wiki/IEEE_754) bits of a float directly (e.g. [link1](http://www.website.masmforum.com/tutorials/fptute/fpuchap2.htm), [link2]( https://stackoverflow.com/questions/15238467/get-the-first-bit-of-the-eax-register-in-x86-assembly-language)), then doing some calculations to recover the decimal representations.
 
-Going through docs, I found a useful command `FXTRACT` which returns the, exponent and significand in the FPU stack in fractional binary form. Googling this a bit more, I found this useful [Stack Overflow thread](https://stackoverflow.com/questions/44572003/fxtract-instruction-example), which I was able to modify to get working to get the exponent and significand in decimal form. 
+Going through docs, I found a useful command `FXTRACT` which returns the, exponent and significand in the FPU stack in fractional binary form. Googling this a bit more, I found this useful [Stack Overflow thread](https://stackoverflow.com/questions/44572003/fxtract-instruction-example), which I was able to repurpose the example of to get the exponent and significand in decimal form. 
 
-To print the values in scientific notation, there are couple things to keep in the mind. 
+To print the values in scientific notation, there are couple things to keep in the mind:
 * The float itself has a sign.
-* The exponent can also be signed.
-* To print the significand, psuedo-code would be as follows:
-  * Retrieve the float into `N`
-  * For the desired float display precision:
-    * Perform integer division on `N`
-    * Print the integer remainder
-    * Multiply the `N` by 10
+* The exponent can also be signed, but is always an integer.
+* Irvine's equivalent procedure prints 7 fractional places and up to 3 exponent digits, e.g. -1.2938572E-001.
+
+To print the significand, my psuedo-code would be as follows:
+* Retrieve the float into `N`
+* For the desired float display precision:
+  * Perform integer division on `N`
+  * Print the integer remainder
+  * Multiply the `N` by 10
 * If it is desired to round the last digit, terminate the loop 1 digit early, store it, then get the next and check if it is > 0.5. If yes, then increment the 2nd to last digit.
 
 ### Additional Resources
