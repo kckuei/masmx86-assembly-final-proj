@@ -10,9 +10,9 @@ The two primary procedures are `ReadVal` and `WriteVal`:
 * Two helper macros, `mGetString` and `mDisplayString`, are implemented which work in concert with the `ReadVal` and `WriteVal` procedures.
 
 ### Valididation Rules
-The following rules
-* must be valid digit (no letters, symbols, special characters, etc.).
+The following rules apply for user inputs:
 * input cannot exceed 25 characters. 
+* must be a valid digit 0-9 (no letters, symbols, special characters, etc.).
 * must fall within range of SDWORD, i.e. -2147483648 to +2147483647.
 * signs '+' or '-' are only allowed for the first character. 
 * a single '+' or '-' character is interpreted as zero.
@@ -22,7 +22,7 @@ The following rules
   * +2147483649 (overflow)
   * 2728fdf2dde (invalida characters)
   * !420@!1337  (invalida characters)
-  *             (null)
+  * (null value)
 
 ### Example Execution
 
