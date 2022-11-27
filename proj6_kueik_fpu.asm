@@ -135,8 +135,8 @@ userFloatArr	REAL8	MAXARRSIZE DUP(0.)
 userFloatSum	REAL8	0.
 userFloatAvg	REAL8	0.
 
-userFloatTest1	REAL8	-123.456
-userFloatTest2	REAL8	+654.321
+userFloatTest3	REAL8	-0.123456
+;userFloatTest3	REAL8	123.456
 
 
 .code
@@ -301,6 +301,7 @@ ReadFloatVal PROC
   LOCAL	l_userString[MAXSIZE]:BYTE
   LOCAL	l_floatVal:REAL10
   LOCAL l_numChar:DWORD	
+  ;LOCAL l_numChar:QWORD	
   LOCAL	l_signFlag:DWORD
   LOCAL	l_signInpFlag:DWORD
   LOCAL l_decPointFlag:DWORD
@@ -450,21 +451,28 @@ _loopLoadIntsToFloat:
     ; Loads the current ascii value character into l_numChar.
 	LODSB						; Copy byte from ESI into AL, decrement ESI.
 	MOVZX	EDX, AL				; Zero-extend NumChar from AL to into EDX.
-	MOV	l_numChar, EDX			; Copy to local numChar.
+	MOV		l_numChar, EDX		; Copy to local numChar.
+
+	;MOVZX	EBX, AL				; Zero-extend NumChar from AL to into EBX.
+	;MOV		EAX, EBX			; Copy from EBX to EAX.
+	;CDQ							; Convert DWORD -> QWORD, EDX -> EAX:EDX
+	;MOV		DWORD PTR l_numChar, EAX		; Copy EAX:EDX into QWORD l_numChar
+	;MOV		DWORD PTR l_numChar+4, EDX
+
 
 	; Check to skip any sign character inputs.
-	CMP	AL, 43		; +
-	JE	_endAccum
-	CMP	AL, 45		; -
-	JE	_endAccum
+	CMP		AL, 43				; +
+	JE		_endAccum
+	CMP		AL, 45				; -
+	JE		_endAccum
 
 	; Check to skip the decimal point location if current character count matches it.
 	; We only want to do this check if the string input was a pure INT (no decimal).
-	CMP	l_decPointFlag, 0
-	JE	_accumDecInt			; Jumps if no decimal was input.
-	MOV	EBX, l_decPointLoc		; Otherwise, does the current count match decimal loc?
-	CMP	l_count, EBX
-	JE	_endAccum				; Jump if yes.
+	CMP		l_decPointFlag, 0
+	JE		_accumDecInt		; Jumps if no decimal was input.
+	MOV		EBX, l_decPointLoc	; Otherwise, does the current count match decimal loc?
+	CMP		l_count, EBX
+	JE		_endAccum			; Jump if yes.
 
 	_accumDecInt:
 	; Accumulates all the integers (decimal and fractional) into l_floatVal using:
@@ -569,7 +577,12 @@ ReadFloatVal ENDP
 ; ---------------------------------------------------------------------------------
 ; Name: WriteFloatVal
 ;
-; PROCEDURE 
+; PROCEDURE to print float values in scientific notation.
+;
+; Implementation based on the solution from: 
+;	https: //stackoverflow.com/questions/49266250/missing-operator-in-
+;	expression-and-command-exited-with-code-1
+;
 ; 
 ; Preconditions: none.
 ;
@@ -579,61 +592,116 @@ ReadFloatVal ENDP
 ; returns:
 ; ---------------------------------------------------------------------------------
 WriteFloatVal PROC
-; IN PROGRESS
-;
-; Strategy
-;  How to extract the decimal and fractional integers?
-;   123.456
-;   
-;   integer part
-;   				r	q
-;   123 / 10  		3	12	
-;   12 / 10			2	1
-;   1 / 10			1	0
-;   
-;   gives integers 	3, 2, 1, which can be reversed
-;   
-;   fractional apart
-;   
-;   0.456 * 10			4.56
-;   0.56 * 10			5.6
-;   0.6 * 10			6.0
-;   
-;   gives fractional integers 4, 5, 6
-;  
-; 
-; http://www.website.masmforum.com/tutorials/fptute/fpuchap2.htm
-; REAL 4
-; 1 sign bit, 8 exponent bits, 23 mantissa
-; REAL8
-; 1 sign bit, 11 exponent bits, 52 mantissa
-; 
-; Want print 1 decimal, mantissa, exponent, e.g.  +5.9600E+00
-; If we get the address, should be able to read and print them.
-	
-  FINIT
-  FLD	userFloatTest1
-  FLD	userFloatTest2
 
-; https://stackoverflow.com/questions/15238467/get-the-first-bit-of-the-eax-register-in-x86-assembly-language
-; Obtaining a bit from a register involves an and operation with a mask that has a 1 in the bit position of interest, and 0 in all other bits. Then optionally, a rotate right or a rotate left to move the bit into the desired position in the result.
-; Get first bit.
-  MOV	EAX, OFFSET userFloatTest1
-  MOV   EBX, EAX
-  AND   EBX, 01
-
-
-  MOV	EAX, OFFSET userFloatTest2
-  MOV   EBX, EAX
-  AND   EBX, 01
-
-  CALL	WriteDec
-
-  ; https://docs.oracle.com/cd/E18752_01/html/817-5477/eoizy.html
-  ; https://cs.fit.edu/~mmahoney/cse3101/float.html
+  ;; Retrieve the exponent and significand (mantissa) from the float
+  ;FLD userFloatTest3
+  ;FXTRACT					; Put significand in ST(0) and exponent in ST(1) 
+  ;FSTP QWORD PTR [fsig]	; fsig =1.929
+  ;FSTP QWORD PTR [fexp]	; fexp = 6
+							; note: processeor works in binary fraction, so fsig * 2 ** fexp = float
   
 
+  ; Declare local variables
+  LOCAL fexp:QWORD
+  LOCAL	fsig:QWORD
+  LOCAL	signFlag:DWORD
+  LOCAL newcw:WORD
+  LOCAL	oldcw:WORD
 
+  ; Initialize 
+  MOV	signFlag, 0
+  MOV	newcw, 1
+  MOV	oldcw, 1
+
+  ; Retrieve the sign of the float.
+  FINIT
+  FLD1									; ST(0) = 1
+  FLD1									; ST(0) = 1, ST(1) = 1
+  FSUB									; ST(0) = 0
+  FLD	REAL8 PTR [userFloatTest3]		; ST(0) = float, ST(1) = 0.
+  CLC									; Carry flag CF must be cleared for JAE.
+  FCOMI	ST, ST(1)						; Compare registers, is the float > 0?
+  JAE	_skipSetSignFlag
+  MOV	signFlag, 1
+_skipSetSignFlag:
+
+  ; Negate the float if it is negative, as the following calculations for
+  ; the exponent and significand are invalid for negative numbers.
+  CMP	signFlag, 0
+  JE	_getExponentSignificand			; Jumps if positive number.
+  FLD	REAL8 PTR [userFloatTest3]		; ST(0) = float.
+  FCHS									; Change the sign of ST(0).
+  FSTP	REAL8 PTR [userFloatTest3]
+
+_getExponentSignificand:
+  ; Retrieve exponent and significand of the float.
+  FLD	REAL8 PTR [userFloatTest3]
+
+  ;  Gets the exponent in decimal form by:
+  ;  fexp = truncate(log_10(fvar))
+  FLD	ST(0)
+  FLDLG2					; Push log10(2) onto the FPU stack.
+  FXCH	ST(1)				; ST(2) = fvar, ST(1) = log_10(2), ST(0) = fvar
+  FYL2X						; log_10(fvar) = log_10(2) * log_2(fvar)
+  FSTCW [oldcw]				; Store FPU control word
+  MOV	DX, [oldcw]
+  OR	DX, 0c000h			; Sets rounding mode = 3, toward zero.
+  MOV	[newcw], DX
+  FLDCW [newcw]
+  FRNDINT					; Truncate log_10(fvar).
+  FLDCW [oldcw]				; Restore old rounding mode.
+  FST	QWORD PTR [fexp]
+
+  ;  Gets the significand in decimal form by: 
+  ;  fsig = fvar / 10^(fexp)
+  FLDL2T					; ST(2) = fvar, ST(1) = fexp, ST(0) = log_2(10)
+  FMULP						; m = log_2(10) * fexp
+  FLD	ST(0)
+  FRNDINT					; Integral part of m
+  FXCH	ST(1)				; ST(2) = fvar, ST(1) = integer, ST(0) = m
+  FSUB	ST(0), ST(1)		; Fractional part of
+  F2XM1						; Computes ST(0): (2^ST(0) - 1)
+  FLD1						; Push +1 onto the PFU stack.
+  FADDP						; 2^(fraction)
+  FSCALE					; 10^fexp = 2^(integer) * 2^(fraction)
+  FSTP	ST(1)				; ST(1) = fvar, ST(0) = 10^fexp
+  FDIVP						; fvar / 10^fexp
+  FSTP	QWORD PTR [fsig]
+
+
+; Printing the significand. 
+; General idea is to take the significand, 
+;	perform integer division, 
+; 	print the integer remainder
+; 	scale the float by 10
+;	repeat to desired number of decimal places
+
+;fval = 1.2356
+;
+;n = fval
+;Perform 6 iterations:
+;	1.2346 % 10 	R = 1			n *= 10 = 12.356
+;	if iteration 2, print a '.'
+;	12.356 % 10		R = 2			n *= 10 = 123.56
+;	123.56 % 10		R = 3			n *= 10 = 1235.6
+;	1235.6 % 10		R = 5			n *= 10	= 12356.0
+;	12356.0 % 10	R = 6			n *= 10	= 123560.0
+;	123560.0 % 10	R = 0			n *= 10	= 1235600.0
+;
+;7th iteration, and 8th for rounding
+;	1235600.0 % 10	R = 0->f1		n *= 10	= 12356000.0
+;	12356000.0 % 10 R = 0->f2
+;	
+;	if f2 > 5:
+;		inc f1 and print	
+; Print 'E'
+; Print the exponent. 
+; The exponent may have a sign too.
+; 
+; -1.2345597E+003
+
+
+  Invoke ExitProcess,0	
 WriteFloatVal ENDP
 
 
