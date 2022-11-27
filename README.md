@@ -67,6 +67,9 @@ The truncated average is: 1
 
 Thanks for playing!
 ```
+
+## Program Requirements
+The program requirements are detailed in the the [REQUIREMENTS.MD](https://github.com/kckuei/masmx86-assembly-final-proj/blob/main/REQUIREMENTS.md).
  
 ## Project Implementation Notes
 
@@ -142,9 +145,6 @@ However, according to the algorithm above, the digits would be returned in rever
 
 #### Signs
 To consider sign, prepend/append an ASCII 45 (-) in the event the `SDWORD` is signed.
-
-## Program Requirements
-The program requirements are detailed in the the [REQUIREMENTS.MD](https://github.com/kckuei/masmx86-assembly-final-proj/blob/main/REQUIREMENTS.md).
 
 ## Reflection and Conceptual Errors
 
