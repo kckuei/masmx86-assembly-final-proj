@@ -2,7 +2,7 @@
 Final project written in intel x86 masm asssembly to implement two procedures `ReadVal` and `WriteVal` from scratch that emulate the Irvine library functions `ReadInt`, and `WriteInt` for signed integers. An initial attempt is made to extend the program to floating point numbers with the procedures `ReadFloatVal` and `WriteFloatVal`, intended to emulate the Irvine library functions `ReadFloat`, and `WriteFloat`.
 
 ## Program Description
-A program is implemented that prompts the user for 10 signed decimal integers, validates them, converts them from their [ASCII](https://www.asciitable.com/) representation, and stores them in memory as `SDWORD`s. The sum and average is computed, and displayed in console by converting the stored input and resultant `SDWORD`s back to their ASCII form for displaying.
+A program is implemented that prompts the user for 10 signed decimal integers, validates them, converts them from their [ASCII](https://www.asciitable.com/) representation, and stores them in memory as `SDWORD`s. The sum and average is computed, and displayed in console by converting the stored input and resultant `SDWORD`s back to their ASCII form.
 
 The two primary procedures are `ReadVal` and `WriteVal`:
 * `ReadVal` accepts a standard and error prompt, and return address for the validated float. When invoked, the user is prompted for input. The input string is then parsed and checked for invalid characters. The numeric value is also checked for numerical under/overflow (i.e., values must fit within a `SDWORD`). If invalid characters, overflow or more than 25 characters are entered, then an error prompt is displayed, and the user is re-prompted for new input. 
