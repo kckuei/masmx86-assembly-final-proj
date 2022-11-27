@@ -1,7 +1,7 @@
 # x86 MASM Assembly Final Project
 Final project written in intel x86 masm asssembly to implement two procedures `ReadVal` and `WriteVal` from scratch that emulate the Irvine library functions `ReadInt`, and `WriteInt` for signed integers. 
 
-A follow up implementation to extend the program to floating point numbers is included which make use of two procedures: `ReadFloatVal` and `WriteFloatVal` to mimic the Irvine library functions `ReadFloat`, and `WriteFloat`.
+A follow up implementation to extend the program to 80 bit extended precision floating point numbers is included which make use of two procedures: `ReadFloatVal` and `WriteFloatVal` to mimic the Irvine library functions `ReadFloat`, and `WriteFloat`.
 
 ## Program Description
 A program is implemented that prompts the user for 10 signed decimal integers, validates them, converts them from their [ASCII](https://www.asciitable.com/) representation, and stores them in memory as `SDWORD`s. The sum and average is computed, and displayed in console by converting the stored input and resultant `SDWORD`s back to their ASCII form.
