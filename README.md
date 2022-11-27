@@ -102,7 +102,7 @@ In the above code, `numInt` acts like an accumulator register, which gets multip
 #### Input Validation and Sign
 Valid characters are the ASCII values between 48-47 (digits 0-9). Sign inputs are limited to the first character position. The first character is checked against ASCII values 45 (-) and 43 (+) to determine the sign, and the sign value and flag updated if negative. Any non-digits (!@#$%^&*{}[]()<>asdf...) are immediately invalid. By virtue of checking the sign on the first character, any repeat or out of position +/- signs would illict an invalid flag.
 
-An `SDWORD` spans -2,147,483,648 to +2,147,483,647, hence the buffer size for bytes read should be at minimum 11 characters to accomodate all possible values. However, to allow for zero padding ont he front (e.g. +0000420, -000069), the program allows for a max of 25 character input. More than 25 character input raises an invalid flag.
+An `SDWORD` spans -2,147,483,648 to +2,147,483,647, hence the buffer size for bytes read should be at minimum 11 characters to accomodate all possible values. However, to allow for zero frontal padding (e.g. +0000420, -000069), the program allows for a max of 25 character input. More than 25 character input raises an invalid flag.
 
 #### Numerical Under/Overflow
 To check for numerical underflow, we accumulate the numbers into a signed integer `SDWORD` `numInt` as follows: 
