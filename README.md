@@ -111,7 +111,7 @@ To check for numerical underflow, we accumulate the numbers into a signed intege
 numInt = 10 * numInt + sign_numInt*(numChar - 48)
 ```
 
-The sign_numInt is set to 1 for positive, or -1 for negative input, and is necessary to accumulate the correct `numInt` for either sign. Under/overflow is considered for by checking the overflow flag (OV) on multiplication (`10 * numInt` terms) or addition (`10 * numInt + sign_numInt*(numChar - 48)` term) in accumulating `numInt`. Overflow occurs if on accumulation, the `SDWORD` `numInt` exceeds the range 2^-31 to 2^31-1 (-2,147,483,648 to +2,147,483,647).
+The sign_numInt is set to 1 for positive, or -1 for negative input, and is necessary to accumulate the correct `numInt` for either sign. Under/overflow is considered for by checking the overflow flag (OV) on multiplication (`10 * numInt`) or addition (`10 * numInt + sign_numInt*(numChar - 48)`) in accumulating `numInt`. Overflow occurs if on accumulation, the `SDWORD` `numInt` exceeds the range 2^-31 to 2^31-1 (-2,147,483,648 to +2,147,483,647).
 
 Some additional readings on checking under/overflow: [link1](https://stackoverflow.com/questions/2399269/checking-for-underflow-overflow-in-c), [link2](
 https://stackoverflow.com/questions/199333/how-do-i-detect-unsigned-integer-overflow).
