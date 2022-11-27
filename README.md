@@ -16,8 +16,8 @@ The following rules apply for user inputs:
 * must fall within range of SDWORD, i.e. -2147483648 to +2147483647.
 * signs '+' or '-' are only allowed for the first character. 
 * a single '+' or '-' character is interpreted as zero.
-* The following are VALID inputs: 0,109,-2147483648,+2147483647,2147483647,-000002147483648,+02147483647
-* The following are INVALID inputs:
+* The following are **VALID** inputs: 0,109,-2147483648,+2147483647,2147483647,-000002147483648,+02147483647
+* The following are **INVALID** inputs:
   * -2147483649 (underflow)
   * +2147483649 (overflow)
   * 2728fdf2dde (invalida characters)
