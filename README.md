@@ -1,9 +1,9 @@
 # Assembly Final Project: Low-Level I/O
 * Computer architecture and assembly final project implemented/written in IA-32 x86 MASM assembly. 
-* Implements and demos low-level I/O procedures for reading/writing signed integers and floating point values similar to the functionality afforded by the Irvine library functions `ReadInt`, `WriteInt`, `ReadFloat`, and `WriteFloat`.
+* Implements and demos low-level I/O procedures for reading/writing signed integers and floating point values, similar to the functionality afforded by the Irvine library functions `ReadInt`, `WriteInt`, `ReadFloat`, and `WriteFloat`.
 * Procedures implemented:
   * `ReadVal` and `WriteVal` for signed integers (32 bit signed integers).
-  * `ReadFloatVal and `WriteFloatVal` for floating point numbers (80 bit extended precision floats).
+  * `ReadFloatVal` and `WriteFloatVal` for floating point numbers (80 bit extended precision floats).
 
 ## Program Description
 The program reads in 10 numbers, validates and converts them from their ASCII representation, performs calculations with them, then displays the numbers and results by converting them from their numeric representations back to ASCII. 
