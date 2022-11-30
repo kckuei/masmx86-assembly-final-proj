@@ -1,5 +1,5 @@
-# x86 MASM Assembly Final Project: Low-Level I/O
-* Computer architecture and assembly final project implemented/written in Intel Architecture (IA) x86 MASM assembly. 
+# Assembly Final Project: Low-Level I/O
+* Computer architecture and assembly final project implemented/written in IA-32 x86 MASM assembly. 
 * Implements and demos low-level I/O procedures for reading/writing signed integers and floating point values similar to the functionality afforded by the Irvine library functions `ReadInt`, `WriteInt`, `ReadFloat`, and `WriteFloat`.
 * Procedures implemented:
   * `ReadVal` and `WriteVal` for signed integers (32 bit signed integers).
