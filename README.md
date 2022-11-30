@@ -29,12 +29,12 @@ The following validation rules apply for user inputs:
 * Invalid inputs:
   * -2147483649 (underflow)
   * +2147483649 (overflow)
-  * 2728fdf2dde (invalida characters)
-  * !420@!1337  (invalida characters)
+  * 2728fdf2dde (invalid characters)
+  * !420@!1337  (invalid characters)
   * (null value)
 #### Floating Point Values
 * must be a valid digit 0-9 (no letters, symbols, special characters, etc.).
-* only 1 decimal point allowed. 
+* only 1 decimal point allowed.
 * signs '+' or '-' are only allowed for the first character. 
 * Valid inputs: -6, 232., 0232, 00232, .232, .0232, +.232, -0.232, +.232, +232, -232, 232
 * Valid inputs (interpreted as zero): ., +., -., 0, -0
