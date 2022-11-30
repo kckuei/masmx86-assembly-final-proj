@@ -1,12 +1,8 @@
 TITLE Project 6 - String Primitives and Macros     (proj6_kueik.asm)
 
-; Author: 					Kevin Kuei
+; Author: 				Kevin Kuei
 ; Last Modified:			November 29, 2022
-; OSU email address: 		kueik@oregonstate.edu
-; Course number/section:   	CS271 Section
-; Project Number:			6                 
-; Due Date:					December 4th, 2022
-; Description:				CS-271 Final Class Portfolio Project
+; Description:				Final Class Portfolio Project
 ; 
 ; A program that reads in 10 numbers, validates and converts them from their ASCII representation,
 ; performs calculations with them, then displays the numbers and results by converting them from 
@@ -130,7 +126,7 @@ mGetString MACRO  m_promptAddr:REQ, m_userStringAddr:REQ, m_bytesReadAddr:REQ
   CALL	WriteString
 
   ; Reads user input.
-  MOV	ECX, MAXSIZE 			; Buffer size, bytes read will be <= buffer size.
+  MOV	ECX, MAXSIZE 		; Buffer size, bytes read will be <= buffer size.
   MOV	EDX, m_userStringAddr	; Destination address.
   CALL	ReadString
 
@@ -174,21 +170,21 @@ ENDM
 
 
 ; Declare global constants.
-MAXSIZE		=		100				; Max buffer size for user input.
-MAXARRSIZE	=		10				; Max signed integer array size.
+MAXSIZE		=	100		; Max buffer size for user input.
+MAXARRSIZE	=	10		; Max signed integer array size.
 
 
 ; Declare data segment variables (only referenced directly in main PROC).
 .data
 introTxt	BYTE	"PROGRAMMING ASSIGNMENT 6: Designing low-level I/O procedures",13,10
-			BYTE	"Written by: Kevin Kuei",13,10,13,10
-			BYTE	"EC: Implements the floating point variation of the project.",13,10,13,10
-			BYTE	"Please provide 10 signed decimal integers.",13,10  
-			BYTE	"Each number needs to be small enough to fit inside a 32 bit register. After you have",13,10
-			BYTE	"finished inputting the raw numbers I will display a list of the integers, their sum,",13,10
-			BYTE	"and their average value.",13,10,13,10
-			BYTE	"Afterwards, enter 10 floating point numbers, and I will display a list of the floating",13,10
-			BYTE	"point values, their sum, and their average value in scientific notation.",13,10,13,10,0
+		BYTE	"Written by: Kevin Kuei",13,10,13,10
+		BYTE	"EC: Implements the floating point variation of the project.",13,10,13,10
+		BYTE	"Please provide 10 signed decimal integers.",13,10  
+		BYTE	"Each number needs to be small enough to fit inside a 32 bit register. After you have",13,10
+		BYTE	"finished inputting the raw numbers I will display a list of the integers, their sum,",13,10
+		BYTE	"and their average value.",13,10,13,10
+		BYTE	"Afterwards, enter 10 floating point numbers, and I will display a list of the floating",13,10
+		BYTE	"point values, their sum, and their average value in scientific notation.",13,10,13,10,0
 promptTxt	BYTE	"Please enter an signed number: ",0
 promptTxtF	BYTE	"Please enter an signed floating point number: ",0
 errorTxt	BYTE	"ERROR: You did not enter a signed number or your number was too big.",13,10
@@ -208,9 +204,9 @@ userFloatArr	REAL10	MAXARRSIZE DUP(0.0)
 userFloatVal	REAL10	0.0
 userFloatSum	REAL10	0.0
 userFloatAvg	REAL10	0.0
-oneHalf			REAL8	0.5
-ten				REAL8	10.0
-pwrOf10			DWORD	1, 10, 1000, 10000, 100000, 10000000, 100000000, 1000000000
+oneHalf		REAL8	0.5
+ten		REAL8	10.0
+pwrOf10		DWORD	1, 10, 1000, 10000, 100000, 10000000, 100000000, 1000000000
 
 
 
@@ -300,8 +296,8 @@ _loopSum:
   ;  Computes the truncated average by integer divison.
   MOV	EAX, userSum				; The quotient in EAX.
   MOV	EBX, MAXARRSIZE				; The divisor in EBX.
-  CDQ								; For 32-bit divison, EAX must be sign-extended into EDX.
-  IDIV	EBX							; Signed integer division. Quotient in EAX.
+  CDQ						; For 32-bit divison, EAX must be sign-extended into EDX.
+  IDIV	EBX					; Signed integer division. Quotient in EAX.
   MOV	userAvg, EAX
   ;  Prints the truncated average.
   PUSH	userAvg
@@ -400,8 +396,8 @@ _LSUM:
   FLD	userFloatSum		; ST(0) = float sum
   MOV	EAX, MAXARRSIZE
   MOV	userVal, EAX		; Array size in EAX.
-  FILD	userVal				; ST(1) = array size, ST(1) = float sum
-  FDIV						; ST(0) = ST(1)/ST(0) = sum/array size
+  FILD	userVal			; ST(1) = array size, ST(1) = float sum
+  FDIV				; ST(0) = ST(1)/ST(0) = sum/array size
   FSTP	userFloatAvg
   ;  Prints the average.
   FLD	userFloatAvg
@@ -433,14 +429,14 @@ main ENDP
 ;   - signs '+' or '-' are only allowed for the first character. 
 ;   - a single '+' or '-' character is interpreted as zero.
 ;	- VALID examples:
-;		0, 109, -2147483648,  +2147483647, 2147483647, -000002147483648,  +02147483647
+;	  0, 109, -2147483648,  +2147483647, 2147483647, -000002147483648,  +02147483647
 ;	- INVALID examples:
-;		-2147483649	(underflow)
-;		+2147483649 (overflow)
-;		2728fdf2dde (invalida characters)
-;		!420@!1337	(invalida characters)
-;					(null)
-;		123456789012345678901234567890 (more than 25 characters)
+;	  -2147483649 (underflow)
+;	  +2147483649 (overflow)
+;	  2728fdf2dde (invalida characters)
+;	  !420@!1337  (invalida characters)
+;		      (null)
+;	  123456789012345678901234567890 (more than 25 characters)
 ; 
 ; ReadVal then converts the validated string of ascii digits to its numeric representation 
 ; (SDWORD), and then stores it a memory variable that is passed by reference.
@@ -460,12 +456,12 @@ main ENDP
 ; ---------------------------------------------------------------------------------
 ReadVal PROC
   ; Declares local variables.
-  LOCAL	l_bytesRead:DWORD				; local DWORD bytesRead, used in MACRO call.
+  LOCAL	l_bytesRead:DWORD			; local DWORD bytesRead, used in MACRO call.
   LOCAL	l_userString[MAXSIZE]:BYTE		; local BYTE array userString, used in MACRO call.
-  LOCAL l_numInt:SDWORD					; local SDWORD numInt, used for ascii calc.
-  LOCAL l_numChar:SDWORD				; local SDWORD numChar, used for ascii calc.
-  LOCAL l_sign:SDWORD					; local SDWORD sign, used for ascii calc.
-  LOCAL	l_signFlag:DWORD				; local DWORD signFlag, used for ascii calc.
+  LOCAL l_numInt:SDWORD				; local SDWORD numInt, used for ascii calc.
+  LOCAL l_numChar:SDWORD			; local SDWORD numChar, used for ascii calc.
+  LOCAL l_sign:SDWORD				; local SDWORD sign, used for ascii calc.
+  LOCAL	l_signFlag:DWORD			; local DWORD signFlag, used for ascii calc.
   LOCAL	l_a:SDWORD, l_b:SDWORD			; local SDWORDs, used for ascii calc.
   
   ; Preserves flags and registers.
@@ -476,7 +472,7 @@ ReadVal PROC
   LEA	EAX, l_userString
   LEA	EBX, l_bytesRead
   mGetString [EBP+16], EAX, EBX			; Returns user input in l_userString
-										; Returns bytes read in l_bytesRead
+						; Returns bytes read in l_bytesRead
   
   ; Validates the string and converts from ascii to SDWORD.
   ;
@@ -505,17 +501,17 @@ _reprompt:
 _asciiToSDWORD:
 
   ;  Initialize loop parameters.
-  MOV	l_numInt, 0				; Initialize local numInt = 0.
-  MOV	l_sign, 1				; Initialize local sign = 1 for positive (-1 for negative).
+  MOV	l_numInt, 0			; Initialize local numInt = 0.
+  MOV	l_sign, 1			; Initialize local sign = 1 for positive (-1 for negative).
   MOV	l_signFlag, 0			; Initialize local signFlag = 0 for positive (1 for negative).
   MOV	ECX, l_bytesRead		; Loop counter set to local bytesRead.
   LEA	EAX, l_userString		; Put local effective address of userString in ESI.
-  MOV	ESI, EAX				;
-  CLD							; Clear direction flag (increments ESI).
+  MOV	ESI, EAX			;
+  CLD					; Clear direction flag (increments ESI).
 
  ;  Begin main loop over the string characters. 
 _loopString:
-	  LODSB						; Loads a byte from ESI into AL, and decrements ESI.
+	  LODSB				; Loads a byte from ESI into AL, and decrements ESI.
 
 	; Performs a check for sign entries (+/-) on the first character. If a sign value, sets
 	; the local mem sign flag l_signFlag, and skips to end of loop at _endDigitsCheck.  All 
@@ -536,7 +532,7 @@ _loopString:
 	  ; Otherwise, check if ascii value 45 (corresponds to -).
 	  CMP	AL, 45
 	  JNE	_digitsCheck		; Jumps if not -.
-	  MOV	l_sign, -1			; Sets the sign to -1 (negative).
+	  MOV	l_sign, -1		; Sets the sign to -1 (negative).
 	  MOV	l_signFlag, 1		; Sets the sign flag to 1 (negative).
 	  JMP	_endDigitsCheck
 	
@@ -553,13 +549,13 @@ _loopString:
 	  ; Otherwise, its a valid digit. Then convert from ascii value to integer
 	  ; by the following iterative algorithm:  
 	  ;		NumInt = a           + b
-	  ;			   = 10 * NumInt + sign(NumInt)*(NumChar - 48)
+	  ;		       = 10 * NumInt + sign(NumInt)*(NumChar - 48)
 	  ; The routine also checks for numerical overflow/underflow during multiplication
 	  ; and addition, i.e. values must be in range -2147483648 to +2147483647.
 
 	  ;  Fetch the current character ascii value into local numChar.
 	  MOVZX	EDX, AL				; Zero-extend NumChar from AL to into EDX.
-	  MOV	l_numChar, EDX		; Copy to local numChar.
+	  MOV	l_numChar, EDX			; Copy to local numChar.
 
 	  ;  Compute a term,  10 * NumInt.
 	  MOV	EAX, 10
@@ -577,7 +573,7 @@ _loopString:
 	  MOV	EAX, l_a
 	  ADD	EAX, l_b
 	  JO	_reprompt			; Jumps if numerical over/underflow.
-	  MOV	l_numInt, EAX		; Update numInt for next iter.
+	  MOV	l_numInt, EAX			; Update numInt for next iter.
 
 	_endDigitsCheck:
 	  LOOP	_loopString			; Decrements ECX and jumps until ECX = 0.
@@ -587,7 +583,7 @@ _endLoop:
   ; Save validated value to destination address.
   MOV   EDI, [EBP+8]			; Destination address in EDI.
   MOV   EAX, l_numInt			; Signed integer in EAX.
-  STOSD							; Copies from EAX to mem address pointed by EDI.
+  STOSD					; Copies from EAX to mem address pointed by EDI.
 
   ;MOV	EDI, [EBP+8]
   ;MOV	EAX, l_numInt
@@ -629,12 +625,12 @@ ReadVal ENDP
 WriteVal PROC
   ; Declare local variables.
   LOCAL	l_outStringArr[MAXARRSIZE+1]:BYTE	; local BYTE string array outStringArr for storing ascii values.
-  LOCAL l_revStringArr[MAXARRSIZE+1]:BYTE   ; local BYTE string array revStringArr for storing reversed array.
-  											;   size is MAXARRSIZE+1 to consider the sign.
-  LOCAL	l_charCount:DWORD					; local DWORD charCount for max character count of signed int.
-  LOCAL l_N_signed:SDWORD					; local SDWORD N_signed, for checking initial sign of passed value.
-  LOCAL	l_N:DWORD							; local DWORD N, for calculating the ascii digits.
-  LOCAL	l_sign:DWORD						; local DWORD sign, flag used for determining whether to prepend '-'.
+  LOCAL l_revStringArr[MAXARRSIZE+1]:BYTE   	; local BYTE string array revStringArr for storing reversed array.
+  						;   size is MAXARRSIZE+1 to consider the sign.
+  LOCAL	l_charCount:DWORD			; local DWORD charCount for max character count of signed int.
+  LOCAL l_N_signed:SDWORD			; local SDWORD N_signed, for checking initial sign of passed value.
+  LOCAL	l_N:DWORD				; local DWORD N, for calculating the ascii digits.
+  LOCAL	l_sign:DWORD				; local DWORD sign, flag used for determining whether to prepend '-'.
 
   ; Preserve flags and registers.
   PUSHAD
@@ -667,12 +663,12 @@ _next:
   ;  Populates the array with ascii values (digits 0-9).
 _loopAsciiDigits:
 	  ; Perform signed integer division, N // 10 to get quotient and remainder. 
-	  MOV	EAX, l_N				; The quotient (local N) in EAX.
-	  MOV	EBX, 10					; The divisor in EBX.
-	  CDQ							; For 32-bit divison, EAX must be sign-extended into EDX.
-	  IDIV	EBX						; Signed integer division. 
-									; Quotient in EAX. N gets updated to equal the quotient.
-									; Remainder in EDX. Remainder gets stored in the array.
+	  MOV	EAX, l_N			; The quotient (local N) in EAX.
+	  MOV	EBX, 10				; The divisor in EBX.
+	  CDQ					; For 32-bit divison, EAX must be sign-extended into EDX.
+	  IDIV	EBX				; Signed integer division. 
+						; Quotient in EAX. N gets updated to equal the quotient.
+						; Remainder in EDX. Remainder gets stored in the array.
 
 	  ; Shift the remainder by 48 to get its ascii representation (0 starts at ascii value 48).
 	  ADD	EDX, 48
@@ -681,11 +677,11 @@ _loopAsciiDigits:
 	  MOV	l_N, EAX
 
 	  ; Stores the remainder on the array (current address pointer in EDI).
-	  MOV	EAX, EDX				; Copies remainder to accumulator EAX.
+	  MOV	EAX, EDX			; Copies remainder to accumulator EAX.
 	  CLD
-	  STOSB							; Copies byte from accumulator AL to mem address in EDI.
-									; Then increments EDI.
-	  INC	l_charCount				; Increments the character account.
+	  STOSB					; Copies byte from accumulator AL to mem address in EDI.
+						; Then increments EDI.
+	  INC	l_charCount			; Increments the character account.
 
 	  ; Check loop exit condition.
 	  CMP	l_N, 0
@@ -694,13 +690,13 @@ _loopAsciiDigits:
   ;  Append ascii value (45)'-' if negative. We add the sign at the end of the string
   ;  since the digits are saved in reverse order.
   CMP	l_sign, 0
-  JE	_skipSign					; Jumps/skips prepending if sign is zero (positive). 
+  JE	_skipSign		; Jumps/skips prepending if sign is zero (positive). 
 
-  MOV	AL, 45						; (45)'-' in AL (one byte).
-  CLD								; Clears direction flag (increments).
-  STOSB								; Copies the byte in AL to address in EDI.
-									; Then increments EDI to move to next array value.
-  INC	l_charCount					; Increments the character account.
+  MOV	AL, 45			; (45)'-' in AL (one byte).
+  CLD				; Clears direction flag (increments).
+  STOSB				; Copies the byte in AL to address in EDI.
+				; Then increments EDI to move to next array value.
+  INC	l_charCount		; Increments the character account.
 _skipSign:
 
   ; Recall the ascii values in l_outStringArr are in reverse order. Reverse the ordering
@@ -743,13 +739,13 @@ WriteVal ENDP
 ; 
 ; Validation is performed as follows:
 ;
-;	- must not empty/null input.
+;   - must not empty/null input.
 ;   - must be valid digit (no letters, symbols, special characters, etc.).
 ;   - input cannot exceed 100 characters.
 ;   - signs '+' or '-' are only allowed for the first character.
 ;	- the following are VALID inputs:
 ;		-6, 232., 0232, 00232, .232, .0232, +.232, -0.232, +.232, +232, -232, 232
-;   - the folllowing are also VALID inputs (get interpreted as zero):
+;       - the folllowing are also VALID inputs (get interpreted as zero):
 ;		., +., -., 0, -0
 ;	- the following are INVALID inputs:
 ;		232dkj2, -232kjd2, 232@! 
@@ -801,14 +797,14 @@ ReadFloatVal PROC
   MOV	l_signFlag, 0			; 0 for positive sign, 1 otherwise.
   MOV	l_signInpFlag, 0		; 0 if character digit, 1 otherwise.
   MOV	l_decPointFlag, 0		; 0 for decimal not yet encountered, 1 otherwise. 
-								; Readings ints when 0, fractional when 1.
+					; Readings ints when 0, fractional when 1.
   MOV	l_decPointLoc, 0
 
   ; Initial trial prompt and input.
   LEA	EAX, l_userString
   LEA	EBX, l_bytesRead
   mGetString [EBP+12], EAX, EBX			; Returns user input in l_userString
-										; Returns bytes read in l_bytesRead
+						; Returns bytes read in l_bytesRead
 
 _checkZeroBytes:
   ;  Checks if byte length/character count is zero, and reprompts if it is.
@@ -849,7 +845,7 @@ _asciiToFloat:
   MOV	ECX, l_bytesRead		; Loop counter set to local bytesRead.
   LEA	EAX, l_userString		; Put local effective address of userString in ESI.
   MOV	ESI, EAX				
-  CLD							; Clear direction flag (increments ESI).
+  CLD					; Clear direction flag (increments ESI).
 
   ;  Begin main loop over the string characters. 
   _loopString:
@@ -889,11 +885,11 @@ _asciiToFloat:
 	  ; reprompt the user.
 	_decimalCheck:
 	  ;  Checks if equal to ascii code for decimal point.
-	  CMP	AL, 46				; .
+	  CMP	AL, 46			; .
 	  JNE	_digitsCheck		; Jumps if digit (not decimal).
 	  ;  Checks for double decimal occurence, and jumps to digits if not.
 	  CMP	l_decPointFlag, 1	
-	  JE	_rePrompt			; Jumps if found previous decimal (flag already set).
+	  JE	_rePrompt		; Jumps if found previous decimal (flag already set).
 	  MOV	l_decPointFlag, 1	; Otherwise, updates the decimal flag.
 	  MOV	EBX, l_bytesRead	; Updates decimal location.
 	  SUB	EBX, ECX
@@ -904,14 +900,14 @@ _asciiToFloat:
 	  ; Performs checks on whether ascii values are valid digits 0-9.
 	_digitsCheck:
 	  ;  Checks if less than ascii code for digit 0.
-	  CMP	AL, 48				; 0
+	  CMP	AL, 48			; 0
 	  JL	_rePrompt
 	  ;  Checks if greater than ascii code for digit 9.
-	  CMP	AL, 57				; 9
+	  CMP	AL, 57			; 9
 	  JG	_rePrompt
 
 	_endDigitsCheck:
-	  LOOP	_loopString			; Decrements ECX and jumps until ECX = 0.
+	  LOOP	_loopString		; Decrements ECX and jumps until ECX = 0.
 _endLoopString:
 
 
@@ -922,7 +918,7 @@ _endLoopString:
 ;    Computes the integer portion of the float with:
 ;		N = 10 * N  +  sign_float*(numChar - 48)
 ;
-;	 Computes the fractional integer portion of the float with:
+;    Computes the fractional integer portion of the float with:
 ;		N = N + sign_float*(numChar-48)/divisor
 ;		divisor *= 10
 ; 
@@ -930,7 +926,7 @@ _endLoopString:
 ; ------------------------------------------------------------------------------
   ;  Sets up main loop parameters.
   FLDZ							
-  FSTP	l_floatVal				; Initializes l_floatVal to zero.
+  FSTP	l_floatVal			; Initializes l_floatVal to zero.
 
   FLDZ
   FSTP	l_floatValFrac			; Initializes l_floatValFrac to zero.
@@ -940,32 +936,32 @@ _endLoopString:
   FILD	l_mem					
   FSTP	l_floatFracDivisor		; Initializes l_floatFracDivisor to 10.
 
-  MOV	l_count, 0				; Initializes current character count/position.
+  MOV	l_count, 0			; Initializes current character count/position.
   MOV	ECX, l_bytesRead		; Loop counter set to local bytesRead.
   LEA	EAX, l_userString		; Put local effective address of userString in ESI.
-  MOV	ESI, EAX				;
+  MOV	ESI, EAX			;
 
-  CLD							; Clear direction flag (increments ESI).
+  CLD					; Clear direction flag (increments ESI).
 _loopLoadIntsToFloat:
     ; Loads the current ascii value character into l_numChar.
-	LODSB						; Copy byte from ESI into AL, decrement ESI.
-	MOVZX	EDX, AL				; Zero-extend NumChar from AL to into EDX.
-	MOV		l_numChar, EDX		; Copy to local numChar.
+	LODSB				; Copy byte from ESI into AL, decrement ESI.
+	MOVZX	EDX, AL			; Zero-extend NumChar from AL to into EDX.
+	MOV	l_numChar, EDX		; Copy to local numChar.
 
 	; Check to skip any sign character inputs.
-	CMP		AL, 43				; +?
-	JE		_endAccum			; Jump if +.
-	CMP		AL, 45				; -?
-	JE		_endAccum			; Jump if -.
+	CMP	AL, 43			; +?
+	JE	_endAccum		; Jump if +.
+	CMP	AL, 45			; -?
+	JE	_endAccum		; Jump if -.
 
 	; Check if the stirng input was a pure INT (no decimal).
-	CMP		l_decPointFlag, 0
-	JE		_accumDecDigits		; Jumps if no decimal point.
+	CMP	l_decPointFlag, 0
+	JE	_accumDecDigits		; Jumps if no decimal point.
 
 	; Otherwise, check if the current count matches the decimal loc, and if so, skip the accumulation.
-	MOV		EBX, l_decPointLoc	
-	CMP		l_count, EBX
-	JE		_endAccum			; Jump if yes.
+	MOV	EBX, l_decPointLoc	
+	CMP	l_count, EBX
+	JE	_endAccum		; Jump if yes.
 
 	_accumDecDigits:
 	; If the character is neither a sign or decimal, then we are accumulating either the integer part, 
@@ -973,75 +969,75 @@ _loopLoadIntsToFloat:
 	; left of the decimal (if present), we accumulate integers. To the right of the decimal (if present),
 	; we are accumulating decimals fractions.
 	;  Jumps to integer accumulation directly if no decimal found.
-	MOV		EBX, l_decPointFlag
-	CMP		EBX, 0
-	JE		_accumIntegerPart			; Jumps if l_decPointFlag = 1.
+	MOV	EBX, l_decPointFlag
+	CMP	EBX, 0
+	JE	_accumIntegerPart	; Jumps if l_decPointFlag = 1.
 	;  Otherwise, we have a decimal.
-	MOV		EBX, l_decPointLoc	
-	CMP		l_count, EBX				; Current count < decimal point location?
-	JL		_accumIntegerPart			; Jump to evaluate integer part if yes.
-	JMP		_accumFractionalPart		; Otherwise, evaluating fractional part.
+	MOV	EBX, l_decPointLoc	
+	CMP	l_count, EBX		; Current count < decimal point location?
+	JL	_accumIntegerPart	; Jump to evaluate integer part if yes.
+	JMP	_accumFractionalPart	; Otherwise, evaluating fractional part.
 
 
 	; Accumulates the integer part of the float into l_floatVal using:
 	;   num = 10 * num  +  sign_num*(numChar - 48)
 	_accumIntegerPart:
-	MOV		EBX, 10				
-	MOV		l_mem, EBX
-	FILD	l_mem				; FT(0) = 10
-	FLD		l_floatVal			; FT(0) = l_floatVal, FT(1) = l_mem
-	FMUL						; FT(0) = 10 * l_floatVal
+	MOV	EBX, 10				
+	MOV	l_mem, EBX
+	FILD	l_mem			; FT(0) = 10
+	FLD	l_floatVal		; FT(0) = l_floatVal, FT(1) = l_mem
+	FMUL				; FT(0) = 10 * l_floatVal
 
-	FILD	l_numChar			; FT(0) = numChar, FT(1) = 10 * l_floatVal 
-	MOV		EBX, 48
-	MOV		l_mem, EBX
-	FILD	l_mem				; FT(0) = 48, FT(1) = numChar, FT(2) = 10 * l_floatVal 
-	FSUB						; FT(0) = numChar - 48, FT(1) = 10 * l_floatVal
+	FILD	l_numChar		; FT(0) = numChar, FT(1) = 10 * l_floatVal 
+	MOV	EBX, 48
+	MOV	l_mem, EBX
+	FILD	l_mem			; FT(0) = 48, FT(1) = numChar, FT(2) = 10 * l_floatVal 
+	FSUB				; FT(0) = numChar - 48, FT(1) = 10 * l_floatVal
 
-	CMP		l_signFlag, 0
-	JE		_skipSignInvert		; Jumps if positive float.
-	FCHS						; FT(0) = sign_floatVal*(numChar - 48), FT(1) = 10 * l_floatVal
+	CMP	l_signFlag, 0
+	JE	_skipSignInvert		; Jumps if positive float.
+	FCHS				; FT(0) = sign_floatVal*(numChar - 48), FT(1) = 10 * l_floatVal
 	_skipSignInvert:
-	FADD						; FT(0) = 10 * l_floatVal + sign_floatVal*(numChar - 48)
+	FADD				; FT(0) = 10 * l_floatVal + sign_floatVal*(numChar - 48)
 
-	FSTP	l_floatVal			; l_floatVal = FT(0)
-	JMP		_endAccum			; Skips to loop update.
+	FSTP	l_floatVal		; l_floatVal = FT(0)
+	JMP	_endAccum		; Skips to loop update.
 
 	; Accumulates the decimal fraction part of the float into l_floatValFrac using:
 	;   num = num + sign_floatVal*(numChar-48)/divisor
 	;	divisor *= 10
 	_accumFractionalPart:
-	FILD	l_numChar			; FT(0) = numChar
-	MOV		EBX, 48
-	MOV		l_mem, EBX			
-	FILD	l_mem				; FT(0) = 48, FT(1) = numChar
-	FSUB						; FT(0) = numChar - 48
+	FILD	l_numChar		; FT(0) = numChar
+	MOV	EBX, 48
+	MOV	l_mem, EBX			
+	FILD	l_mem			; FT(0) = 48, FT(1) = numChar
+	FSUB				; FT(0) = numChar - 48
 
-	FLD		l_floatFracDivisor	; FT(0) = divisor, FT(1) = numChar - 48
-	FDIV						; FT(0) = FT(1)/FT(0) = (numchar - 48)/divisor
+	FLD	l_floatFracDivisor	; FT(0) = divisor, FT(1) = numChar - 48
+	FDIV				; FT(0) = FT(1)/FT(0) = (numchar - 48)/divisor
 
-	CMP		l_signFlag, 0
-	JE		_skipSignInvert2	; Jumps if positive float.
-	FCHS						; FT(0) = sign_floatVal*(numchar - 48)/divisor
+	CMP	l_signFlag, 0
+	JE	_skipSignInvert2	; Jumps if positive float.
+	FCHS				; FT(0) = sign_floatVal*(numchar - 48)/divisor
 	_skipSignInvert2:
-	FLD		l_floatValFrac		; FT(0) = floatFrac, FT(1) = sign_floatVal*(numchar - 48)/divisor
-	FADD						; FT(0) = floatFrac + sign_floatVal*(numchar - 48)/divisor
+	FLD	l_floatValFrac		; FT(0) = floatFrac, FT(1) = sign_floatVal*(numchar - 48)/divisor
+	FADD				; FT(0) = floatFrac + sign_floatVal*(numchar - 48)/divisor
 	
 	FSTP	l_floatValFrac		; l_floatValFrac = FT(0)
  
-	MOV		EBX, 10
-	MOV		l_mem, EBX			
-	FILD	l_mem				; FT(0) = 10
-	FLD		l_floatFracDivisor	; FT(0) = divisor, FT(1) = 10
-	FMUL						; FT(0) = 10*divisor
+	MOV	EBX, 10
+	MOV	l_mem, EBX			
+	FILD	l_mem			; FT(0) = 10
+	FLD	l_floatFracDivisor	; FT(0) = divisor, FT(1) = 10
+	FMUL				; FT(0) = 10*divisor
 	FSTP	l_floatFracDivisor	; l_floatFracDivisor = FT(0).
 
 	_endAccum:
 	; Increments the character count and continues looping while ECX > 0.
-	INC		l_count
-	DEC		ECX					; Loop can only perform short jumps (-128 to +127 bytes).
-	CMP		ECX, 0				; Must decrement and check manually.
-	JNE		_loopLoadIntsToFloat	
+	INC	l_count
+	DEC	ECX			; Loop can only perform short jumps (-128 to +127 bytes).
+	CMP	ECX, 0			; Must decrement and check manually.
+	JNE	_loopLoadIntsToFloat	
 
 
   ; Combine integer and fractional parts of the float.
@@ -1055,7 +1051,7 @@ _loopLoadIntsToFloat:
 ; to the FPU stack in ST(0)
 ; ------------------------------------------------------------------------------
 _returnFloat:
-  FLD	l_floatVal				; Send float value to FPU stack ST(0).
+  FLD	l_floatVal			; Send float value to FPU stack ST(0).
 
   ; Restore flags and registers.
   POPFD
@@ -1080,7 +1076,7 @@ ReadFloatVal ENDP
 ; Preconditions: Must call FINIT before call, e.g.:
 ;
 ;	FINIT
-;	FLD		REAL10 PTR [userFloatVal]
+;	FLD	REAL10 PTR [userFloatVal]
 ;	Call	WriteFloatVal
 ;
 ; Postconditions: Alters the FPU stack and flags.
@@ -1121,10 +1117,10 @@ WriteFloatVal PROC
 ; to decimal fractions are for positive numbers only.
 ; ------------------------------------------------------------------------------
 ;  Sets the sign flag.
-  FLDZ									; ST(0) = 0
+  FLDZ						; ST(0) = 0
   FLD	REAL8 PTR [userFloat]			; ST(0) = float, ST(1) = 0.
-  CLC									; Carry flag CF must be cleared for JAE.
-  FCOMI	ST, ST(1)						; Compare registers, is the float > 0?
+  CLC						; Carry flag CF must be cleared for JAE.
+  FCOMI	ST, ST(1)				; Compare registers, is the float > 0?
   JAE	_skipSetSignFlag
   MOV	signFlag, 1
   FSTP	ST(0)
@@ -1135,7 +1131,7 @@ _skipSetSignFlag:
   CMP	signFlag, 0
   JE	_getExponentSignificand			; Jumps if positive number.
   FLD	REAL8 PTR [userFloat]			; ST(0) = float.
-  FCHS									; Change the sign of ST(0).
+  FCHS						; Change the sign of ST(0).
   FSTP	REAL8 PTR [userFloat]
 
 ; ------------------------------------------------------------------------------
@@ -1148,32 +1144,32 @@ _getExponentSignificand:
   ;  Gets the exponent in decimal form by:
   ;  fexp = truncate(log_10(fvar))
   FLD	ST(0)
-  FLDLG2					; Push log10(2) onto the FPU stack.
+  FLDLG2				; Push log10(2) onto the FPU stack.
   FXCH	ST(1)				; ST(2) = fvar, ST(1) = log_10(2), ST(0) = fvar
-  FYL2X						; log_10(fvar) = log_10(2) * log_2(fvar)
+  FYL2X					; log_10(fvar) = log_10(2) * log_2(fvar)
   FSTCW [oldcw]				; Store FPU control word
   MOV	DX, [oldcw]
   OR	DX, 0c000h			; Sets rounding mode = 3, toward zero.
   MOV	[newcw], DX
   FLDCW [newcw]
-  FRNDINT					; Truncate log_10(fvar).
+  FRNDINT				; Truncate log_10(fvar).
   FLDCW [oldcw]				; Restore old rounding mode.
   FST	REAL8 PTR [fexp]
 
   ;  Gets the significand in decimal form by: 
   ;  fsig = fvar / 10^(fexp)
-  FLDL2T					; ST(2) = fvar, ST(1) = fexp, ST(0) = log_2(10)
-  FMULP						; m = log_2(10) * fexp
+  FLDL2T				; ST(2) = fvar, ST(1) = fexp, ST(0) = log_2(10)
+  FMULP					; m = log_2(10) * fexp
   FLD	ST(0)
-  FRNDINT					; Integral part of m
+  FRNDINT				; Integral part of m
   FXCH	ST(1)				; ST(2) = fvar, ST(1) = integer, ST(0) = m
-  FSUB	ST(0), ST(1)		; Fractional part of
-  F2XM1						; Computes ST(0): (2^ST(0) - 1)
-  FLD1						; Push +1 onto the PFU stack.
-  FADDP						; 2^(fraction)
-  FSCALE					; 10^fexp = 2^(integer) * 2^(fraction)
+  FSUB	ST(0), ST(1)			; Fractional part of
+  F2XM1					; Computes ST(0): (2^ST(0) - 1)
+  FLD1					; Push +1 onto the PFU stack.
+  FADDP					; 2^(fraction)
+  FSCALE				; 10^fexp = 2^(integer) * 2^(fraction)
   FSTP	ST(1)				; ST(1) = fvar, ST(0) = 10^fexp
-  FDIVP						; fvar / 10^fexp
+  FDIVP					; fvar / 10^fexp
   FSTP	REAL8 PTR [fsig]
 
 ; ------------------------------------------------------------------------------
@@ -1199,56 +1195,56 @@ _getExponentSignificand:
   ; Print the sign of the float.
   CMP	signFlag, 1
   JE	_setNegChar
-  MOV	AL, 43			; +
+  MOV	AL, 43				; +
   JMP	_P1
   _setNegChar:
-  MOV	AL, 45			; -
+  MOV	AL, 45				; -
   _P1:
   CALL	WriteChar
 
 
   ; Prints the significand digits.
-  MOV	ECX, 8						; Sets no. digits of significand to display.
+  MOV	ECX, 8				; Sets no. digits of significand to display.
   MOV	DWORD PTR multiplier, 10	; Sets multiplier to 10.
-  MOV	count, 0					; Sets current character count to 0.
+  MOV	count, 0			; Sets current character count to 0.
 _L1:
   ;  This is the magic step! 
   ;  To deal with rounding issues, we multiply by a large power of 10, and add 
   ;  0.5 to force rounding upstream to lower decimal digits locations. Once rounded, 
   ;  we divide back by a large power of 10. 
   FILD	DWORD PTR [pwrOf10+7*4]					
-  FLD	REAL8 PTR [fsig]			; Multiplies fsig by 1000000000.
+  FLD	REAL8 PTR [fsig]		; Multiplies fsig by 1000000000.
   FMUL	
   
-  FLD	REAL8 PTR [oneHalf]			; Add 1/2 to fsig to force rounding.
+  FLD	REAL8 PTR [oneHalf]		; Add 1/2 to fsig to force rounding.
   FADD
 
   FILD	DWORD PTR [pwrOf10+7*4]					
   FDIV
-  FSTP	REAL8 PTR [fsig]			; Divides fsig by 1000000000.
+  FSTP	REAL8 PTR [fsig]		; Divides fsig by 1000000000.
 
   ;  Now we are ready to iterate through the digits and print them.
   ;  Does multiplier * significand and returns it to local temp using
   ;  rounding truncation.
   FILD	DWORD PTR [multiplier]
   FLD	REAL8 PTR [fsig]
-  FMUL						; (10's multiplier) * significand
-  FISTTP DWORD PTR [temp]	; Performs rounding truncation and stores in temp.
+  FMUL					; (10's multiplier) * significand
+  FISTTP DWORD PTR [temp]		; Performs rounding truncation and stores in temp.
   
 
   ;  Performs integer division to get the remainder (digit 0-9).
   MOV	EAX, temp			; Dividend in EAX.
   MOV	EDX, 0				; Clear high dividend.
   MOV	EBX, 10				; Divisor
-  DIV	EBX					; Quotient in EAX. 
-							; Remainder in EDX.
+  DIV	EBX				; Quotient in EAX. 
+					; Remainder in EDX.
 
   ;  Perform another round of integer division with the quotient. 
   MOV	EDX, 0				; Clear high dividend.
-  DIV	EBX					; Dividend (previous quotient) in EAX. 
-							; Divisor still 10 in EBX.
-							; Remainder in EDX.
-  MOV	remainder, EDX		; Save remainder
+  DIV	EBX				; Dividend (previous quotient) in EAX. 
+					; Divisor still 10 in EBX.
+					; Remainder in EDX.
+  MOV	remainder, EDX			; Save remainder
 
   ;  Prints the ascii representation of the digit.
   MOV	EDX, remainder
@@ -1267,7 +1263,7 @@ _L1:
   MOV	EAX, multiplier
   MOV	EBX, 10
   MUL	EBX
-  MOV	multiplier, EAX		; scale multiplier by 10
+  MOV	multiplier, EAX			; scale multiplier by 10
   INC	count
   LOOP	_L1
 _endL1:
