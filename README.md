@@ -241,7 +241,7 @@ PUSH val1
 CALL myRroc      ; Return value on FPU stack, FT(0).
 ```
 
-## Floating Point Unit Implementation (Extra Credit)
+## Floating Point Implementation Notes
 
 My initial idea for implementing the `WriteFloatVal` procedure was to try accessing the [sign, exponent, and mantissa](https://en.wikipedia.org/wiki/IEEE_754) bits of a float directly (e.g. [link1](http://www.website.masmforum.com/tutorials/fptute/fpuchap2.htm), [link2]( https://stackoverflow.com/questions/15238467/get-the-first-bit-of-the-eax-register-in-x86-assembly-language)), then doing some calculations to recover the decimal representations.
 
