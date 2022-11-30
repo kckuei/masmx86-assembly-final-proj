@@ -264,3 +264,8 @@ For example, suppose you store `44.68`, but the significand ends up being stored
 Now it's possible to march forward through the lower decimal digit positions and obtain the correct values by iteratively multiplying by powers of 10, casting/truncating the value to an integer, and dividing by 10 for the remainder. 
 
 Some other useful commands were `FILD` for loading integer values, `FISTP` for storing integer values, `FRNDINT` for rounding in accordance with the control word, and the `FISTTP` instruction which performs true truncation of floating point values. 
+
+## Closing
+This was a really challenging project by far, especially the floating point implementation! However, I learned a lot, and really enjoyed tackling it. In the words of my TA:
+> The idea is to implement from scratch. The EC is basically re-doing the whole project but with floats intead of integers. It's not a lot of points per hour spent (**at least for mere mortals**). But it does seem like a fun challenge if you have the time.
+Although many a restless night, I guess I can now say I am no mere mortal. 🥲
