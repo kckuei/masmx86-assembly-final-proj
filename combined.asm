@@ -29,7 +29,7 @@ TITLE Project 6 - String Primitives and Macros     (proj6_kueik.asm)
 ;
 ; Assumptions:
 ;	Assumes that the total sum of the valid numbers will fit inside a 32 bit register.
-;   Assumes that the SUM of floating point inputs will fit inside an extended precision float REAL10.
+;   	Assumes that the SUM of floating point inputs will fit inside an extended precision float REAL10.
 ;
 ; EXAMPLE PROGRAM OUTPUT:
 ;
