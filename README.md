@@ -1,30 +1,49 @@
-# x86 MASM Assembly Final Project
-Final project written in intel x86 masm asssembly to implement two procedures `ReadVal` and `WriteVal` from scratch that emulate the Irvine library functions `ReadInt`, and `WriteInt` for signed integers. 
-
-A follow up implementation to extend the program to 80 bit extended precision floating point numbers is included which make use of two procedures: `ReadFloatVal` and `WriteFloatVal` to mimic the Irvine library functions `ReadFloat`, and `WriteFloat`.
+# x86 MASM Assembly Final Project: Low-Level I/O
+* Computer architecture and assembly final project implemented/written in Intel Architecture (IA) x86 MASM assembly. 
+* Implements and demos low-level I/O procedures for reading/writing signed integers and floating point values similar to the functionality afforded by the Irvine library functions `ReadInt`, `WriteInt`, `ReadFloat`, and `WriteFloat`.
+* Procedures implemented:
+  * `ReadVal` and `WriteVal` for signed integers (32 bit signed integers).
+  * `ReadFloatVal and `WriteFloatVal` for floating point numbers (80 bit extended precision floats).
 
 ## Program Description
-A program is implemented that prompts the user for 10 signed decimal integers, validates them, converts them from their [ASCII](https://www.asciitable.com/) representation, and stores them in memory as `SDWORD`s. The sum and average is computed, and displayed in console by converting the stored input and resultant `SDWORD`s back to their ASCII form.
+The program reads in 10 numbers, validates and converts them from their ASCII representation, performs calculations with them, then displays the numbers and results by converting them from their numeric representations back to ASCII. 
 
-The two primary procedures are `ReadVal` and `WriteVal`:
-* `ReadVal` accepts a standard and error prompt, and return address for the validated float. When invoked, the user is prompted for input. The input string is then parsed and checked for invalid characters. The numeric value is also checked for numerical under/overflow (i.e., values must fit within a `SDWORD`). If invalid characters, overflow or more than 25 characters are entered, then an error prompt is displayed, and the user is re-prompted for new input. 
-* `WriteVal` accepts an `SDWORD`, and converts the numeric value back to its ASCII representation.
-* Two helper macros, `mGetString` and `mDisplayString`, are implemented which work in concert with the `ReadVal` and `WriteVal` procedures.
+The program implements two variants, which are executed one after the other:
+  1. one implementation that reads, prints, and manipulates signed integers using the `ReadVal`, `WriteVal` procedures, and
+  2. another implementation for floating point numbers using the `ReadFloatVal`, `WriteFloatVal` procedures.
+ 
+The signed integer implementation stores the input numbers in memory as `SDWORD`s. `ReadlVal` checks the user string for invalid characters and garuntees the input to fit inside a `SDWORD` range (-2147483648 to +2147483647) by checking for numerical over/underflow, otherwise the user is re-prompted for new input. 
+
+The floating point implementation stores the numbers in memory as 80-bit extended precision float values (`REAL10`). `ReadFloatVal` also checks the user string for invalid characters, but does not check for under/overflow.
+
+In accordance with program specifications, the program implements two companion helper macros, `mGetString` and `mDisplayString`. The macros work in concert with the `ReadVal`, `WriteVal`, `ReadFloatVal`, `WriteFloatVal` procedures for prompting the user, and returning ASCII strings, or displaying ASCII strings. 
+
 
 ### Valididation Rules
 The following rules apply for user inputs:
+
+#### Signed Integers
 * input cannot exceed 25 characters. 
 * must be a valid digit 0-9 (no letters, symbols, special characters, etc.).
 * must fall within range of SDWORD, i.e. -2147483648 to +2147483647.
 * signs '+' or '-' are only allowed for the first character. 
 * a single '+' or '-' character is interpreted as zero.
-* The following are **VALID** inputs: 0,109,-2147483648,+2147483647,2147483647,-000002147483648,+02147483647
-* The following are **INVALID** inputs:
+* Valid inputs: 0,109,-2147483648,+2147483647,2147483647,-000002147483648,+02147483647
+* Invalid inputs:
   * -2147483649 (underflow)
   * +2147483649 (overflow)
   * 2728fdf2dde (invalida characters)
   * !420@!1337  (invalida characters)
   * (null value)
+  
+#### Floating Point Values
+* must be a valid digit 0-9 (no letters, symbols, special characters, etc.).
+* only 1 decimal point allowed. 
+* signs '+' or '-' are only allowed for the first character. 
+* Valid inputs: -6, 232., 0232, 00232, .232, .0232, +.232, -0.232, +.232, +232, -232, 232
+* Valid inputs (interpreted as zero): ., +., -., 0, -0
+* Invalid inputs: 232dkj2, -232kjd2, 232@! 
+
 
 ### Example Execution
 
@@ -32,22 +51,25 @@ The following rules apply for user inputs:
 PROGRAMMING ASSIGNMENT 6: Designing low-level I/O procedures
 Written by: Kevin Kuei
 
+EC: Implements the floating point variation of the project.
+
 Please provide 10 signed decimal integers.
 Each number needs to be small enough to fit inside a 32 bit register. After you have
 finished inputting the raw numbers I will display a list of the integers, their sum,
 and their average value.
 
-Please enter an signed number:
+Afterwards, enter 10 floating point numbers, and I will display a list of the floating
+point values, their sum, and their average value in scientific notation.
+
+Please enter an signed number: =67-
 ERROR: You did not enter a signed number or your number was too big.
-Please try again: =67-
+Please try again: 37373kjdfdf
 ERROR: You did not enter a signed number or your number was too big.
-Please try again: 37373kdfdfhjdf
-ERROR: You did not enter a signed number or your number was too big.
-Please try again: 1234567890987654323456789
+Please try again: 234567898765432345678
 ERROR: You did not enter a signed number or your number was too big.
 Please try again: -+23232
 ERROR: You did not enter a signed number or your number was too big.
-Please enter an signed number: -2147483649
+Please try again: -2147483649
 ERROR: You did not enter a signed number or your number was too big.
 Please try again: +2147483649
 ERROR: You did not enter a signed number or your number was too big.
@@ -57,16 +79,34 @@ Please enter an signed number: -186
 Please enter an signed number: -145
 Please enter an signed number: 16
 Please enter an signed number: +23
-Please enter an signed number: 51
+Please enter an signed number: 000051
 Please enter an signed number: 0
 Please enter an signed number: 56
 Please enter an signed number: 11
-
+		
 You entered the following numbers:
 156, 34, -186, -145, 16, 23, 51, 0, 56, 11
 The sum of these numbers is: 16
 The truncated average is: 1
-
+		
+Please enter an signed floating point number: -123.23456
+Please enter an signed floating point number: 99.99999
+Please enter an signed floating point number: 44.98
+Please enter an signed floating point number: 1.1
+Please enter an signed floating point number: 2.2
+Please enter an signed floating point number: 3.3
+Please enter an signed floating point number: 9.9@
+ERROR: You did not enter a signed number or your number was too big.
+Please try again: 9.9
+Please enter an signed floating point number: 10.10
+Please enter an signed floating point number: 48.66
+Please enter an signed floating point number: 77.7
+		
+You entered the following numbers:
+-1.2323456e2, +9.9999990e1, +4.4980000e1, +1.1000000e0, +2.2000000e0, +3.3000000e0, +9.9000000e0, +1.0100000e1, +4.8660000e1, +7.7700000e1
+The sum of these numbers is: +1.7470543e2
+The floating point average is: +1.7470543e1
+		
 Thanks for playing!
 ```
 
