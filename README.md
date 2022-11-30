@@ -18,8 +18,7 @@ In accordance with program specifications, the program implements two companion 
 
 
 ### Valididation Rules
-The following rules apply for user inputs:
-
+The following validation rules apply for user inputs:
 #### Signed Integers
 * input cannot exceed 25 characters. 
 * must be a valid digit 0-9 (no letters, symbols, special characters, etc.).
@@ -33,7 +32,6 @@ The following rules apply for user inputs:
   * 2728fdf2dde (invalida characters)
   * !420@!1337  (invalida characters)
   * (null value)
-  
 #### Floating Point Values
 * must be a valid digit 0-9 (no letters, symbols, special characters, etc.).
 * only 1 decimal point allowed. 
