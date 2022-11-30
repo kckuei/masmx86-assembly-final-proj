@@ -16,10 +16,12 @@ The floating point implementation stores the numbers in memory as 80-bit extende
 
 In accordance with program specifications, the program implements two companion helper macros, `mGetString` and `mDisplayString`. The macros work in concert with the `ReadVal`, `WriteVal`, `ReadFloatVal`, `WriteFloatVal` procedures for prompting the user, and returning ASCII strings, or displaying ASCII strings. 
 
+## Program Requirements
+The program requirements are detailed in the the [REQUIREMENTS.MD](https://github.com/kckuei/masmx86-assembly-final-proj/blob/main/REQUIREMENTS.md).
 
-### Valididation Rules
+## Input Valididation Rules
 The following validation rules apply for user inputs:
-#### Signed Integers
+### Signed Integers
 * input cannot exceed 25 characters. 
 * must be a valid digit 0-9 (no letters, symbols, special characters, etc.).
 * must fall within range of SDWORD, i.e. -2147483648 to +2147483647.
@@ -32,7 +34,7 @@ The following validation rules apply for user inputs:
   * 2728fdf2dde (invalid characters)
   * !420@!1337  (invalid characters)
   * (null value)
-#### Floating Point Values
+### Floating Point Values
 * must be a valid digit 0-9 (no letters, symbols, special characters, etc.).
 * only 1 decimal point allowed.
 * signs '+' or '-' are only allowed for the first character. 
@@ -40,8 +42,7 @@ The following validation rules apply for user inputs:
 * Valid inputs (interpreted as zero): ., +., -., 0, -0
 * Invalid inputs: 232dkj2, -232kjd2, 232@! 
 
-
-### Example Execution
+## Example Execution
 
 ```assembly
 PROGRAMMING ASSIGNMENT 6: Designing low-level I/O procedures
@@ -106,9 +107,6 @@ The floating point average is: +1.7470543e1
 Thanks for playing!
 ```
 
-## Program Requirements
-The program requirements are detailed in the the [REQUIREMENTS.MD](https://github.com/kckuei/masmx86-assembly-final-proj/blob/main/REQUIREMENTS.md).
- 
 ## Project Implementation Notes
 
 ### ReadVal Implementation
