@@ -257,7 +257,7 @@ On substituting $b=2$, $d=10$, and rearranging for the decimal term:
 
 $$ {\log_{10} fval} =  {\log_2 fval} \cdot {\log_{10} 2} $$
 
-Conveniently, there are a number of helper functions for performing the math and related manipulations, such as `FYL2X` (which performs $y\cdot\log_2 x$), `FLDL2T` (which loads $\log_2 10$), and `FSCALE` (which does 2^ST(0) + ST(1)), and `F2XM1` (which computes $2^ST(0) - 1$)
+Conveniently, there are a number of helper functions for performing the math and related manipulations, such as `FYL2X` (which performs $y\cdot\log_2 x$), `FLDL2T` (which loads $\log_2 10$), and `FSCALE` (which does `2^ST(0) + ST(1)`), and `F2XM1` (which computes `2^ST(0) - 1`)
 
 With the significand and exponent values in decimal form at hand, I thought it would be a relatively clear path to implementing the `WriteFloatVal` procedure next. However, printing the values in scientific notation proved to be fairly challenging! Round off/precision error, as well as my frustration were in great abundance. 
 
