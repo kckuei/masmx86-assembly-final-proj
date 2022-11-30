@@ -251,12 +251,12 @@ Skimming through the docs, I then found a useful command `FXTRACT` which returns
 
 With the significand and exponent values in decimal form at hand, I thought it would be a relatively clear path to implementing the `WriteFloatVal` procedure next. However, printing the values in scientific notation proved to be fairly challenging! Round off/precision error, as well as my frustration were in great abundance. 
 
-My eureka moment came when I realized that the best way to deal with the rounding/precision errors was to multiply the values by a large power of 10, then add 0.5 to force rounding upstream in the lower decimal places, then dividing back by the large power of 10 (as opposed to trying to deal with rounding digits in the downstream directions). This works so long as the large power of 10 that you mutiply by is one power of 10 larger than the number of decimal places that are desired to display.
+My eureka moment came when I realized that the best way to deal with the rounding/precision errors was to multiply the values by a large power of 10, then add 0.5 to force rounding upstream in the lower decimal places, then dividing back by the large power of 10 (as opposed to trying to deal with rounding digits in the downstream directions). This works so long as the large power of 10 that you mutiply by is greater than the number of decimal places that are desired to display (an example is given below).
 
-For example, suppose you store 44.68, but the significand ends up being stored as 4.4679999999999999999-- (where the '--' indicates more trailing digits). Well, take 4.4679999999999999999--, multiply it by 1000000, then add one half like so:
+For example, suppose you store `44.68`, but the significand ends up being stored as `4.4679999999999999999--` (where the '--' indicates more trailing digits). Well, take `4.4679999999999999999--`, multiply it by `1000000`, add `0.5`, then divide back by`1000000` like so:
 
 ```
-4.4679999999999999999-- * 1000000 = 44679999.999999999999--   ; Multiply by large power of 10
+4.4679999999999999999-- * 1000000 = 44679999.999999999999--   ; Multiply by large power of 10, e.g. 1e6
 44679999.999999999999-- + 0.5	  = 44680000.499999999999--   ; Add 0.5
 44680000.499999999999-- / 1000000 = 4.4680000499999999999--   ; Divide back by a large power of 10
 ```
