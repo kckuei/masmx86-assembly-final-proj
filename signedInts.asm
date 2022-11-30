@@ -2,11 +2,7 @@ TITLE Project 6 - String Primitives and Macros     (proj6_kueik.asm)
 
 ; Author: 			Kevin Kuei
 ; Last Modified:		November 26, 2022
-; OSU email address: 		kueik@oregonstate.edu
-; Course number/section:   	CS271 Section
-; Project Number:		6                 
-; Due Date:			December 4th, 2022
-; Description:			CS-271 Final Class Portfolio Project
+; Description:			Final Class Portfolio Project
 ; 
 ; A program that reads in 10 signed decimal integers, validates and converts them from their
 ; ASCII representation to SDWORDs, performs calculations with them, and then echos the input
@@ -104,7 +100,7 @@ mGetString MACRO  m_promptAddr:REQ, m_userStringAddr:REQ, m_bytesReadAddr:REQ
 
   ; Reads user input.
   MOV	ECX, MAXSIZE 			; Buffer size, bytes read will be <= buffer size.
-  MOV	EDX, m_userStringAddr	; Destination address.
+  MOV	EDX, m_userStringAddr		; Destination address.
   CALL	ReadString
 
   ; Copies EAX to mem address referenced by EDI.
@@ -147,8 +143,8 @@ ENDM
 
 
 ; Declare global constants.
-MAXSIZE		=	100				; Max buffer size for user input.
-MAXARRSIZE	=	10				; Max signed integer array size.
+MAXSIZE		=	100	; Max buffer size for user input.
+MAXARRSIZE	=	10	; Max signed integer array size.
 
 
 ; Declare data segment variables (only referenced directly in main PROC).
@@ -166,10 +162,10 @@ inputedTxt	BYTE	13,10,"You entered the following numbers:",13,10,0
 sumText		BYTE	13,10,"The sum of these numbers is: ",0
 truncAvgTxt	BYTE	13,10,"The truncated average is: ",0
 goodbyeTxt	BYTE	13,10,13,10,"Thanks for playing!",13,10,0
-userVal		SDWORD	?				; For storing the return output from ReadVal.
+userVal		SDWORD	?		; For storing the return output from ReadVal.
 userIntArr	SDWORD	MAXSIZE DUP(?)	; For storing an array of return values from ReadVal.
-userSum		SDWORD	?				; For storing the sum of userIntArr.
-userAvg		SDWORD	?				; For storing the truncated average of userIntArr.
+userSum		SDWORD	?		; For storing the sum of userIntArr.
+userAvg		SDWORD	?		; For storing the truncated average of userIntArr.
 
 
 .code
@@ -405,13 +401,13 @@ _loopString:
 	  ; and addition, i.e. values must be in range -2147483648 to +2147483647.
 
 	  ;  Fetch the current character ascii value into local numChar.
-	  MOVZX	EDX, AL				; Zero-extend NumChar from AL to into EDX.
-	  MOV	l_numChar, EDX			; Copy to local numChar.
+	  MOVZX	EDX, AL			; Zero-extend NumChar from AL to into EDX.
+	  MOV	l_numChar, EDX		; Copy to local numChar.
 
 	  ;  Compute a term,  10 * NumInt.
 	  MOV	EAX, 10
-	  IMUL	l_numInt			; Signed mult. as NumInt can be negative.
-	  JO	_reprompt			; Jumps if numerical over/underflow.
+	  IMUL	l_numInt		; Signed mult. as NumInt can be negative.
+	  JO	_reprompt		; Jumps if numerical over/underflow.
 	  MOV	l_a, EAX
 
 	  ;  Compute b term, sign(NumInt)*(NumChar - 48).
@@ -423,11 +419,11 @@ _loopString:
 	  ;  Sums the a and b terms, and update numInt.
 	  MOV	EAX, l_a
 	  ADD	EAX, l_b
-	  JO	_reprompt			; Jumps if numerical over/underflow.
-	  MOV	l_numInt, EAX			; Update numInt for next iter.
+	  JO	_reprompt		; Jumps if numerical over/underflow.
+	  MOV	l_numInt, EAX		; Update numInt for next iter.
 
 	_endDigitsCheck:
-	  LOOP	_loopString			; Decrements ECX and jumps until ECX = 0.
+	  LOOP	_loopString		; Decrements ECX and jumps until ECX = 0.
 	
 _endLoop:
 
