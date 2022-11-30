@@ -8,11 +8,9 @@
 ## Program Description
 The program reads in 10 numbers, validates and converts them from their ASCII representation, performs calculations with them, then displays the numbers and results by converting them from their numeric representations back to ASCII. 
 
-The program implements two variants, which are executed one after the other:
-  1. one implementation that reads, prints, and manipulates signed integers using the `ReadVal`, `WriteVal` procedures, and
-  2. another implementation for floating point numbers using the `ReadFloatVal`, `WriteFloatVal` procedures.
+The program implements two variants, which are executed one after the other: **(1)** one implementation that reads, prints, and manipulates signed integers using the `ReadVal`, `WriteVal` procedures, and **(2)** another implementation for floating point numbers using the `ReadFloatVal`, `WriteFloatVal` procedures.
  
-The signed integer implementation stores the input numbers in memory as `SDWORD`s. `ReadlVal` checks the user string for invalid characters and garuntees the input to fit inside a `SDWORD` range (-2147483648 to +2147483647) by checking for numerical over/underflow, otherwise the user is re-prompted for new input. 
+The signed integer implementation stores the input numbers in memory as `SDWORD`'s. `ReadlVal` checks the user string for invalid characters and garuntees the input to fit inside a `SDWORD` range (-2147483648 to +2147483647) by checking for numerical over/underflow, otherwise the user is re-prompted for new input. 
 
 The floating point implementation stores the numbers in memory as 80-bit extended precision float values (`REAL10`). `ReadFloatVal` also checks the user string for invalid characters, but does not check for under/overflow.
 
