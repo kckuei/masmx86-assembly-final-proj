@@ -251,11 +251,11 @@ Skimming through the docs, I then found a useful command `FXTRACT` which returns
 
 The main math underlying the transformation is the [change of base formula]( https://en.wikipedia.org/wiki/Logarithm#Change_of_base). The equation is stated as follows:
 
-$$ {\log_b x} = \frac{\log_10 x}{\log_10 2} $$
+$$ {\log_b x} = \frac{\log_d x}{\log_d b} $$
 
-Or rearranging for the decimal term:
+On substituting $b=2$, $d=10$, and rearranging for the decimal term:
 
-$$ {\log_10 fval} =  {\log_2 fval} \cdot {\log_10 2} $$
+$$ {\log_{10} fval} =  {\log_2 fval} \cdot {\log_{10} 2} $$
 
 Conveniently, there are a number of helper functions for performing the math and related manipulations, such as `FYL2X` (which performs $y\cdot\log_2 x$), `FLDL2T` (which loads $\log_2 10$), and `FSCALE` (which does 2^ST(0) + ST(1)), and `F2XM1` (which computes $2^ST(0) - 1$)
 
