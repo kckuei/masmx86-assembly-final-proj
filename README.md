@@ -47,7 +47,7 @@ The following rules apply for user inputs:
 
 ### Example Execution
 
-```
+```assembly
 PROGRAMMING ASSIGNMENT 6: Designing low-level I/O procedures
 Written by: Kevin Kuei
 
