@@ -268,4 +268,5 @@ Some other useful commands were `FILD` for loading integer values, `FISTP` for s
 ## Closing
 This was a really challenging project by far, especially the floating point implementation! However, I learned a lot, and really enjoyed tackling it. In the words of my TA:
 > The idea is to implement from scratch. The EC is basically re-doing the whole project but with floats intead of integers. It's not a lot of points per hour spent (**at least for mere mortals**). But it does seem like a fun challenge if you have the time.
+
 Although many a restless night, I guess I can now say I am no mere mortal. 🥲
