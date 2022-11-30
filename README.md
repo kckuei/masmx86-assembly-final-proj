@@ -249,6 +249,12 @@ My initial idea for implementing the `WriteFloatVal` procedure was to try access
 
 Skimming through the docs, I then found a useful command `FXTRACT` which returns the, exponent and significand in the FPU stack. However, these value were in fractional binary form. On googling the best way to convert it to decimal representation, I found this useful [Stack Overflow thread](https://stackoverflow.com/questions/44572003/fxtract-instruction-example), which goes over the math, and provides an example. I was able to tweak/repurpose the example to obtain the exponent and significand in decimal form that I needed.
 
+The main math underlying the transformation is the [change of base formula]( https://en.wikipedia.org/wiki/Logarithm#Change_of_base). The equation is stated as follows:
+$$ {\log_b x} = \frac{\log_10 x}{\log_10 2} $$
+Or rearranging for the decimal term:
+$$ {\log_10 fval} =  {\log_2 fval} \cdot {\log_10 2} $$
+Conveniently, there are a number of helper functions for performing the math and related manipulations, such as `FYL2X` (which performs $y\cdot\log_2 x$), `FLDL2T` (which loads $\log_2 10$), and `FSCALE` (which does 2^ST(0) + ST(1)), and `F2XM1` (which computes $2^ST(0) - 1$)
+
 With the significand and exponent values in decimal form at hand, I thought it would be a relatively clear path to implementing the `WriteFloatVal` procedure next. However, printing the values in scientific notation proved to be fairly challenging! Round off/precision error, as well as my frustration were in great abundance. 
 
 My eureka moment came when I realized that the best way to deal with the rounding/precision errors was to multiply the values by a large power of 10, then add 0.5 to force rounding upstream in the lower decimal places, then dividing back by the large power of 10 (as opposed to trying to deal with rounding digits in the downstream directions). This works so long as the large power of 10 that you mutiply by is greater than the number of decimal places that are desired to display (an example is given below).
