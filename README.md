@@ -188,7 +188,7 @@ To consider sign, prepend/append an ASCII 45 (-) in the event the `SDWORD` is si
 
 A silly, but small amateur mistake which induced much headache while debugging. What I thought were disparate/seperate isolated issues when implementing my signed integer and floating point implementations all turned out to be related to not properly 'double-dereferencing' my passed addresses. 
 
-For example, suppose we want to return a value from a procedure called within `main`, passing in one stack parameter using the stdcall approach. That value is passed by address (located at [EBP+8]).
+For example, suppose we want to return a value from a procedure called within `main`, passing in one stack parameter using the [stdcall](https://github.com/kckuei/masmx86-assembly-final-proj/blob/main/assets/stack-convention.png) approach. That value is passed by address (located at [EBP+8]).
 
 If working with integers, in general AVOID:
 
@@ -245,10 +245,22 @@ CALL myRroc      ; Return value on FPU stack, FT(0).
 
 My initial idea for implementing the `WriteFloatVal` procedure was to try accessing the [sign, exponent, and mantissa](https://en.wikipedia.org/wiki/IEEE_754) bits of a float directly (e.g. [link1](http://www.website.masmforum.com/tutorials/fptute/fpuchap2.htm), [link2]( https://stackoverflow.com/questions/15238467/get-the-first-bit-of-the-eax-register-in-x86-assembly-language)), then doing some calculations to recover the decimal representations.
 
-Skimming through the docs, I then found a useful command `FXTRACT` which returns the, exponent and significand in the FPU stack. However, these value were in fractional binary form. On googling the best way to convert it to decimal representation, I found this useful [Stack Overflow thread](https://stackoverflow.com/questions/44572003/fxtract-instruction-example), which goes over the math, and that I was able to repurpose the example of to get the exponent and significand in decimal form that I needed.
+![real4](./assets/real4.svg)
 
-With the significand and exponent values in decimal form at hand, I thought it should be a relatively clear path to implementing the `WriteFloatVal` procedure. However, printing the values in scientific notation proved to be fairly challenging! Round off/precision error, as well as my frustration were in great abundance. 
+Skimming through the docs, I then found a useful command `FXTRACT` which returns the, exponent and significand in the FPU stack. However, these value were in fractional binary form. On googling the best way to convert it to decimal representation, I found this useful [Stack Overflow thread](https://stackoverflow.com/questions/44572003/fxtract-instruction-example), which goes over the math, and provides an example. I was able to tweak/repurpose the example to obtain the exponent and significand in decimal form that I needed.
 
-My eureka moment came when I realized that the best way to deal with the rounding/precision errors was to multiply the values by a large power of 10, then add 0.5 to force rounding upstream of the lower decimal places, then dividing back by the large power of 10. This works so long as the large power of 10 that you mutiply by is one power of 10 larger than the number of decimal places that are desired to display.
+With the significand and exponent values in decimal form at hand, I thought it would be a relatively clear path to implementing the `WriteFloatVal` procedure next. However, printing the values in scientific notation proved to be fairly challenging! Round off/precision error, as well as my frustration were in great abundance. 
+
+My eureka moment came when I realized that the best way to deal with the rounding/precision errors was to multiply the values by a large power of 10, then add 0.5 to force rounding upstream of the lower decimal places, then dividing back by the large power of 10 (as opposed to trying to deal with rounding digits in the downstream directions). This works so long as the large power of 10 that you mutiply by is one power of 10 larger than the number of decimal places that are desired to display.
+
+For example, suppose you store 44.68, but the significand ends up being stored as 4.4679999999999999999-- (where the '--' indicates more trailing digits). Well, take 4.4679999999999999999--, multiply it by 1000000, then add one half like so:
+
+```
+4.4679999999999999999-- * 1000000 = 44679999.999999999999--   ; Multiply by large power of 10
+44679999.999999999999-- + 0.5	  = 44680000.499999999999--   ; Add 0.5
+44680000.499999999999-- / 1000000 = 4.4680000499999999999--   ; Divide back by a large power of 10
+```
+
+Now it's possible to march forward through the lower decimal digit positions and obtain the correct values by iteratively multiplying by powers of 10, casting/truncating the value to an integer, and dividing by 10 for the remainder. 
 
 Some other useful commands were `FILD` for loading integer values, `FISTP` for storing integer values, `FRNDINT` for rounding in accordance with the control word, and the `FISTTP` instruction which performs true truncation of floating point values. 
