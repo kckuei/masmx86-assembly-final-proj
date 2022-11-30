@@ -144,19 +144,21 @@ Valid characters are the ASCII values between 48-47 (digits 0-9). Sign inputs ar
 An `SDWORD` spans -2,147,483,648 to +2,147,483,647, hence the buffer size for bytes read should be at minimum 11 characters to accomodate all possible values. However, to allow for zero frontal padding (e.g. +0000420, -000069), the program allows for a max of 25 character input. More than 25 character input raises an invalid flag.
 
 #### Numerical Under/Overflow
-To check for numerical underflow, we accumulate the numbers into a signed integer `SDWORD` `numInt` as follows: 
+In accordance with the algorithm above, each individual digit is accumulated into a signed integer `SDWORD` `numInt` as follows: 
 
 ```python
 numInt = 10 * numInt + sign_numInt*(numChar - 48)
 ```
 
-The sign_numInt is set to 1 for positive, or -1 for negative input, and is necessary to accumulate the correct `numInt` for either sign. Under/overflow is considered for by checking the overflow flag (OV) on multiplication (`10 * numInt`) or addition (`10 * numInt + sign_numInt*(numChar - 48)`) in accumulating `numInt`. Overflow occurs if on accumulation, the `SDWORD` `numInt` exceeds the range 2^-31 to 2^31-1 (-2,147,483,648 to +2,147,483,647).
+The `sign_numInt` term is set to 1 for positive and -1 for negative input, and is necessary to accumulate the correct `numInt` for either sign.
+
+Overflow occurs if on accumulation, the `SDWORD` `numInt` exceeds the range 2^-31 to 2^31-1 (-2,147,483,648 to +2,147,483,647). Under/overflow conditions are considered for by checking the overflow flag (OF) and using a conditional jump `JO` (OF=1) for reprompting the user. It is important to check for under/overflow on both the multiplication (`10 * numInt`) and addition (`10 * numInt + sign_numInt*(numChar - 48)`) in accumulating `numInt`. 
 
 Some additional readings on checking under/overflow: [link1](https://stackoverflow.com/questions/2399269/checking-for-underflow-overflow-in-c), [link2](
 https://stackoverflow.com/questions/199333/how-do-i-detect-unsigned-integer-overflow).
 
 ### WriteVal Implementation
-Converts an SDWORD to ascii string using the following [algorithm](https://www.geeksforgeeks.org/program-to-print-ascii-value-of-all-digits-of-a-given-number/) as reference, written in a HLL (C++):
+Converts an SDWORD to ASCII string using the following [algorithm](https://www.geeksforgeeks.org/program-to-print-ascii-value-of-all-digits-of-a-given-number/) as reference, written in a HLL (C++):
 
 ```c++
 int convertToASCII(int N)
@@ -182,35 +184,37 @@ However, according to the algorithm above, the digits would be returned in rever
 #### Signs
 To consider sign, prepend/append an ASCII 45 (-) in the event the `SDWORD` is signed.
 
-## Reflection and Conceptual Errors
+#### The importance of 'Double-Dereferencing'
 
-### Common Mistakes
+A silly, but small amateur mistake which induced much headache while debugging. What I thought were disparate/seperate isolated issues when implementing my signed integer and floating point implementations all turned out to be related to not properly 'double-dereferencing' my passed addresses. 
 
-A mistake I encountered quite a lot of while working on this project were in my attempts to pass **single** value results back from procedures called within `main`. What I thought were disparate/seperate isolated issues when implementing my signed integer and floating point implementations all turned out to be related to not properly 'double-dereferencing' my passed addresses. 
+For example, suppose we want to return a value from a procedure called within `main`, passing in one stack parameter using the stdcall approach. That value is passed by address (located at [EBP+8]).
 
-For example, suppose we want to return a value from a procedure called within `main`, passing in one stack parameter (located at [EBP+8] using stdcall approach) of the offset address destination for the return value.
-
-If working with integers, in general we should AVOID things like:
+If working with integers, in general AVOID:
 
 ```assembly
 MOV EBX, localIntVal
 MOV [EBP+8], EBX
 ```
-But DO things like:
+But DO:
 
 ```assembly
 ; Using move
 MOV EBX, [EBP+8]
 MOV EAX, localIntVal
 MOV [EBX], EAX
+```
 
+OR
+
+```assembly
 ; Using string primitives
 MOV EDI, [EBP+8]
 MOV EAX, localIntVal
 STOSD
 ```
 
-Similarly, with floating point values, in general we should AVOID doing:
+Similarly, with floating point values, in general AVOID:
 
 ```assembly
 FINIT
@@ -218,7 +222,7 @@ FST localIntVal
 FST REAL PTR [EBP+8]
 ```
 
-But do things like:
+But DO:
 
 ```assembly
 MOV EDI, [EBP+8]
@@ -238,55 +242,11 @@ CALL myRroc      ; Return value on FPU stack, FT(0).
 ```
 
 ## Floating Point Unit Implementation (Extra Credit)
-I also re-attmpted the project using FPU instructions in order to read and write floating point numbers. I got as far as implementing a `ReadFloatVal` procedure to do essentially what Irvine's `ReadFloat` procedure does, but wasn't able to finish my implementation of `WriteFloatVal` to replace Irvine's `WriteFloat`. 
-
-Example output of the unfinished program using my implementation of `ReadFloatVal`, but Irvine's `WriteFloatVal` below:
-
-```assembly
-PROGRAMMING ASSIGNMENT 6: Designing low-level I/O procedures
-Written by: Kevin Kuei
-
-Please provide 10 floating point numbers.
-Each number needs to be small enough to fit inside a 32 bit register. After you have
-finished inputting the raw numbers I will display a list of the integers, their sum,
-and their average value.
-
-Please enter an signed number: -1.1
-Please enter an signed number: 2.2
-Please enter an signed number: -3.3
-Please enter an signed number: 4.4
-Please enter an signed number: 5.5
-Please enter an signed number: 6.6
-Please enter an signed number: 7.7
-Please enter an signed number: 8.8
-Please enter an signed number: 9.9
-Please enter an signed number: 10.10
-
-You entered the following numbers:
--1.1000000E+000, +2.2000000E+000, -3.3000000E+000, +4.4000000E+000, +5.5000000E+000, +6.6000000E+000, +7.7000000E+000, +8.8000000E+000, +9.9000000E+000, +1.0100000E+001
-The sum of these numbers is: +5.0800000E+001
-The floating point average is: +5.0800000E+000
-
-Thanks for playing!
-```
 
 My initial idea for implementing the `WriteFloatVal` procedure was to try accessing the [sign, exponent, and mantissa](https://en.wikipedia.org/wiki/IEEE_754) bits of a float directly (e.g. [link1](http://www.website.masmforum.com/tutorials/fptute/fpuchap2.htm), [link2]( https://stackoverflow.com/questions/15238467/get-the-first-bit-of-the-eax-register-in-x86-assembly-language)), then doing some calculations to recover the decimal representations.
 
-Going through docs, I found a useful command `FXTRACT` which returns the, exponent and significand in the FPU stack in fractional binary form. Googling this a bit more, I found this useful [Stack Overflow thread](https://stackoverflow.com/questions/44572003/fxtract-instruction-example), which I was able to repurpose the example of to get the exponent and significand in decimal form. 
+Skimming through the docs, I then found a useful command `FXTRACT` which returns the, exponent and significand in the FPU stack. However, these value were in fractional binary form. On googling the best way to convert it to decimal representation, I found this useful [Stack Overflow thread](https://stackoverflow.com/questions/44572003/fxtract-instruction-example), which I was able to repurpose the example of to get the exponent and significand in decimal form. 
 
-To print the values in scientific notation, there are couple things to keep in the mind:
-* The float itself has a sign.
-* The exponent can also be signed, but is always an integer.
-* Irvine's equivalent procedure prints 7 fractional places and up to 3 exponent digits, e.g. -1.2938572E-001.
+Some very useful commands were `FILD` for loading integer values, `FISTP` for storing integer values, `FRNDINT` for rounding in accordance with the control word, and the `FISTTP` instruction which performs true truncation of floating point values. 
 
-To print the significand, my psuedo-code would be as follows:
-* Retrieve the float into `N`
-* For the desired float display precision:
-  * Perform integer division on `N`
-  * Print the integer remainder
-  * Multiply the `N` by 10
-* If it is desired to round the last digit, terminate the loop 1 digit early, store it, then get the next and check if it is > 0.5. If yes, then increment the 2nd to last digit.
-
-### Additional Resources
-* https://docs.oracle.com/cd/E18752_01/html/817-5477/eoizy.html
-* https://cs.fit.edu/~mmahoney/cse3101/float.html
+With the significand and exponent values in decimal form, I thought it was a clear path to implementing the `WriteFloatVal` procedure. However, printing the values in scientific notation proved fairly challenging! Round off/precision error, as well as my frustration were in great abundance. My eureka moment came when I realized that the way to deal with the rounding/precision errors was to multiply the values by a large power of 10, adding 0.5 to force rounding upstream of the lower decimal places, then dividing back by the large power of 10. 
